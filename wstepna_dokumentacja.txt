@@ -329,7 +329,76 @@ Poniżej przedstawiono słownik danych dla każdej tabeli w bazie, zawierający 
 *   `id_nagrody` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator nagrody.
 *   `id_zawodnika` (INTEGER): Klucz obcy, identyfikator zawodnika, który otrzymał nagrodę.
 *   `nazwa_nagrody` (VARCHAR(100)): Nazwa otrzymanej nagrody.
-*   `rok` (SMALLINT): Rok przyznania nagrody (wartość > 1900 i <= bieżący rok).
+*   `rok` (SMALLINT): Rok przyznania nagrody (wartość > 1900 i <= bieżący rok).  
+**Opis:** Widok łączy dane z tabel `mecz` i `zespol`, aby pokazać datę meczu, nazwy zespołów gospodarzy i gości oraz ich wyniki.
+
+**11.2. Przykładowe operacje DML (INSERT, UPDATE, DELETE)**
+
+**Operacja: Dodanie nowego zawodnika (`INSERT`)
+*   **Cel:** Umożliwia dodanie nowego zawodnika do bazy danych.
+*   **SQL:**
+    ```sql
+    INSERT INTO zawodnik (imie, nazwisko, pozycja, data_urodzenia, id_zespolu)
+    VALUES ('Michael', 'Jordan', 'Rzucający obrońca', '1963-02-17', 1); -- Zakładając, że ID 1 to Chicago Bulls
+    ```
+*   **Opis:** Zapytanie wstawia nowy wiersz do tabeli `zawodnik` z podanymi danymi. `id_zawodnika` zostanie wygenerowane automatycznie dzięki typowi `SERIAL`.
+
+**Operacja: Zmiana zespołu zawodnika (`UPDATE`)
+*   **Cel:** Umożliwia przypisanie zawodnika do innego zespołu.
+*   **SQL:**
+    ```sql
+    UPDATE zawodnik
+    SET id_zespolu = 2 -- Zakładając, że ID 2 to Los Angeles Lakers
+    WHERE id_zawodnika = 10; -- Zakładając, że aktualizujemy zawodnika o ID 10
+    ```
+*   **Opis:** Zapytanie aktualizuje kolumnę `id_zespolu` dla zawodnika o określonym `id_zawodnika`, co w praktyce oznacza jego transfer do innej drużyny.
+
+**Operacja: Usunięcie zawodnika (`DELETE`)
+*   **Cel:** Umożliwia usunięcie zawodnika z bazy danych.
+*   **SQL:**
+    ```sql
+    DELETE FROM zawodnik
+    WHERE id_zawodnika = 15; -- Zakładając, że usuwamy zawodnika o ID 15
+    ```
+*   **Opis:** Zapytanie usuwa wiersz odpowiadający zawodnikowi o podanym `id_zawodnika`. Dzięki kaskadowemu usuwaniu (`ON DELETE CASCADE`) w innych tabelach (np. `statystyki_meczu`, `kontrakt`), wszystkie powiązane z nim wpisy również zostaną automatycznie usunięte.
+
+**11.3. Przykładowe zapytania agregujące i raportowe**
+
+**Zapytanie: Bilans zwycięstw i porażek zespołu w danym sezonie**
+*   **Cel:** Prezentuje bilans zwycięstw i porażek dla każdego zespołu w wybranym sezonie.
+*   **SQL:**
+    ```sql
+    SELECT
+        z.nazwa AS nazwa_zespolu,
+        tl.liczba_zwyciestw,
+        tl.liczba_porazek,
+        tl.miejsce_w_tabeli
+    FROM tabela_ligowa tl
+    JOIN zespol z ON tl.id_zespolu = z.id_zespolu
+    WHERE tl.id_sezonu = 1 -- Przykładowy ID sezonu
+    ORDER BY tl.miejsce_w_tabeli ASC;
+    ```
+*   **Opis:** Zapytanie łączy tabelę `tabela_ligowa` z tabelą `zespol`, aby wyświetlić nazwę zespołu oraz jego bilans zwycięstw, porażek i miejsce w tabeli dla określonego sezonu.
+
+**Zapytanie: Zawodnik z największą liczbą punktów w pojedynczym meczu**
+*   **Cel:** Identyfikuje zawodnika, który zdobył najwięcej punktów w jednym meczu, wraz z informacjami o tym meczu.
+*   **SQL:**
+    ```sql
+    SELECT
+        s.punkty,
+        z.imie,
+        z.nazwisko,
+        m.data_meczu,
+        zes.nazwa AS zespol_zawodnika
+    FROM statystyki_meczu s
+    JOIN zawodnik z ON s.id_zawodnika = z.id_zawodnika
+    JOIN mecz m ON s.id_meczu = m.id_meczu
+    JOIN zespol zes ON z.id_zespolu = zes.id_zespolu
+    ORDER BY s.punkty DESC
+    LIMIT 1;
+    ```
+*   **Opis:** Zapytanie łączy dane ze `statystyki_meczu`, `zawodnik`, `mecz` i `zespol` w celu znalezienia maksymalnej liczby punktów zdobytych w jednym meczu przez zawodnika i wyświetla szczegóły tego osiągnięcia.
+
 
 
 
