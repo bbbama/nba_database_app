@@ -1,0 +1,60 @@
+Bazy danych I – dokumentacja projektu
+Dokumentacja projektu wykonywanego w ramach zajęć
+BAZY DANYCH I
+I. Projekt koncepcji, założenia ( 3 pkt. )
+1. Zdefiniowanie tematu projektu: krótki opis zadania, zdefiniowanie
+jego celów i zadań jakie ma realizować.
+2. Analiza wymagań użytkownika: określenie funkcjonalności jakie ma
+spełniać projektowana baza danych.
+3. Zaprojektowanie funkcji: określenie podstawowych funkcji
+realizowanych w bazie danych.
+II. Projekt diagramów (konceptualny) ( 2 pkt. )
+4. Budowa i analiza diagramu przepływu danych (DFD): określenie
+przepływu danych w systemie (wejścia, wyjścia, operacje,
+przechowywanie). Należy zastanowić się nad wybraniem elementów,
+które będą sterowały tym przepływem.
+5. Zdefiniowanie encji (obiektów) oraz ich atrybutów.
+6. Zaprojektowanie relacji pomiędzy encjami: określenia klas encji wraz
+z atrybutami oraz zdefiniowanie kluczy. Następnie trzeba ustalić
+powiązania między encjami (eliminacja powiązań wiele-do-wielu).
+Etap ten powinien prowadzić do ostatecznej definicji logiki bazy
+danych. Efekt powinien zostać przedstawiony w postaci diagramu
+ERD.
+III. Projekt logiczny ( 2 pkt. )
+7. Projektowanie tabel, kluczy, indeksów: w oparciu o zdefiniowany
+diagram ERD należy opisać strukturę bazy danych wraz ze
+szczegółami technicznymi. Załączyć projekt w języku SQL.
+8. Słowniki danych: wypisać słownik danych, określić dziedziny oraz ich
+ograniczenia.
+9. Analiza zależności funkcyjnych i normalizacja tabel (dekompozycja do
+3NF ewentualnie BCNF): dokonanie sprawdzenia, czy tabele spełniają
+Semestr zimowy 2022/2023, Bazy danych I Str. 1
+Bazy danych I – dokumentacja projektu
+warunki zakładanych postaci normalnych ( ew. dekompozycja w celu
+normalizacji).
+10. Denormalizacja struktury tabel: ma ona na celu optymalizację
+przetwarzania, przechowywania danych archiwalnych, dostosowanie
+do specyficznych wymagań. [opcjonalnie].
+11. Zaprojektowanie operacji na danych: zdefiniowanie kwerend dla
+realizacji funkcji wyspecyfikowanych w założeniach projektu
+(pierwsza część dokumentacji, punkt 3 ). Załączyć projekt w języku
+SQL.
+IV. Projekt funkcjonalny ( 2 pkt. )
+12. Interfejsy do prezentacji, edycji i obsługi danych: zdefiniowanie
+struktury poszczególnych formularzy do wprowadzania danych oraz
+powiązań między formularzami.
+13. Wizualizacja danych: określenie formy i struktury raportów które będą
+generowane przez bazę danych.
+14. Zdefiniowanie panelu sterowania aplikacji.
+15. Makropolecenia: powinny ułatwiać obsługę aplikacji z poziomu panelu
+sterowania oraz ewentualnie z poziomu formularzy.
+V. Dokumentacja ( 1 pkt. )
+16. Wprowadzanie danych: zdefiniowanie sposobu wprowadzania danych
+( ręczne, automatyczne, import).
+17. Dokumentacja użytkownika: krótka instrukcja obsługi aplikacji.
+18. Opracowanie dokumentacji technicznej: ma to być dokumentacja
+kodu, która pozwoli na dalszą rozbudowę systemu. W przypadku
+projektu zrealizowanego w Javie, C++ czy PHP może zostać ona
+wygenerowana przy użyciu narzędzi automatycznie tworzących
+dokumentację.
+19. Wykaz literatury.

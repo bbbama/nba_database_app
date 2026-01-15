@@ -1,0 +1,33 @@
+PROJEKT: Aplikacja i baza danych NBA (PostgreSQL + GUI)
+
+Opis projektu
+Projekt polega na stworzeniu bazy danych PostgreSQL oraz aplikacji klienckiej z graficznym interfejsem użytkownika, umożliwiającej zarządzanie informacjami dotyczącymi drużyn, zawodników i meczów ligi NBA. Celem projektu jest odzwierciedlenie struktury prawdziwych danych sportowych oraz zaprezentowanie praktycznego wykorzystania relacyjnych baz danych, widoków, funkcji agregujących, walidacji danych i mechanizmów spójności.
+
+Zakres systemu
+System obejmuje:
+• zarządzanie drużynami (informacje o zespole, trenerze, mieście, roku założenia),
+• zarządzanie zawodnikami (dane osobowe, pozycje, przypisanie do drużyny),
+• informacje o meczach NBA (termin, gospodarze, goście, wyniki),
+• statystyki  zawodników w poszczególnych meczach (punkty, asysty, zbiórki itp.),
+• elementy rozszerzające: hale (areny), konferencje, dywizje, kontrakty zawodników, kontuzje.
+
+Funkcjonalności aplikacji
+• przeglądanie, edycja i dodawanie danych we wszystkich tabelach,
+• generowanie raportów i zestawień (min. trzy), opartych o tabele i widoki,
+• wykorzystanie widoków, funkcji agregujących i kluczy obcych,
+• obsługa logiki biznesowej po stronie bazy (walidacja, wyzwalacze),
+• pełna obsługa w języku polskim (nazwy tabel, pól, formularzy, raportów).
+
+Cel i zastosowanie
+Projekt ma na celu stworzenie kompletnego, praktycznego rozwiązania, które:
+• prezentuje pełny proces modelowania danych,
+• demonstruje tworzenie rzeczywistych relacji 1-n i n-m,
+• wykorzystuje zaawansowane funkcje PostgreSQL,
+• umożliwia interakcję użytkownika z bazą poprzez GUI,
+• może być dalej rozwijane o system uprawnień i dodatkowe moduły.
+
+Podsumowanie
+Projekt łączy elementy bazy danych i aplikacji użytkowej, tworząc spójny system zarządzania informacjami o NBA. System umożliwia wygodne wprowadzanie danych, analizę statystyk oraz prezentację wyników poprzez raporty, spełniając wymagania projektowe od oceny dostatecznej po bardzo dobrą w zależności od stopnia rozbudowy.
+
+
+

@@ -1,0 +1,44 @@
+Projekt zaliczeniowy: Aplikacja bazodanowa - PostgreSQL - wymagania
+Zaliczenie projektu następuje po dostarczeniu prowadzącemu zajęcia działającej aplikacji
+opartej na bazie danych PostgreSQL wraz z odpowiednią dokumentacją. Aplikacja klienta do
+bazy danych zawiera GUI (graficzny interfejs użytkownika) zrealizowany w Javie, C, C++,
+Python lub jako usługa WWW (php, Python, node.js). Poniżej przedstawione zostały wygania
+dotyczące modelu logicznego dla bazy danych wspieranej przez aplikację oraz podstawowe
+założenia aplikacji klienta.
+Na ocenę dostateczną:
+1. Baza danych złożona z adekwatnej liczby relacji (tabel) do realizowanego projektu
+powiązanych związkami typu n-m oraz 1-n. Pod adekwatną liczbą relacji (tabel)
+rozumiemy minimalną liczbę relacji (tabel) wymaganych do realizacji projektu.
+Uwaga:
+Do liczby relacji (tabel) nie są wliczane encje słownikowe oraz encje
+asocjacyjne. Tabele powiązane relacją jeden-do-jeden traktujemy jako jedną
+tabelę.
+2. Elementy zawarte w bazie danych:
+a. wykorzystanie w bazie widoków,
+b. wykorzystanie kluczy obcych,
+c. wykorzystanie funkcji agregujących.
+3. Aplikacja klienta:
+a. przegląd i wprowadzanie danych poprzez formularze (do wszystkich tabel),
+b. wyprowadzanie informacji w formie raportów (raport prosty oparty na tabeli
+lub widoku – przynajmniej trzy raporty),
+c. aplikacja napisana w języku polskim – nazwy obiektów (tabele – w tym pola,
+widoki, formularze, raporty, itp.) po POLSKU.
+4. Dokumentacja:
+a. dokumentacja – zgodna z wzorem dokumentacji.
+Na ocenę dobrą:
+5. 6. Wymagania takie jak na ocenę dostateczną.
+Dodatkowo zaimplementowane funkcjonalności po stronie bazy danych:
+a. widoki zawierające funkcje agregujące wykorzystujące różne parametry
+klauzul GROUP BY oraz HAVING,
+b. c. walidacja danych w bazie danych,
+wykorzystanie funkcji wbudowanych i wyzwalaczy, kontrola spójności
+danych, blokada wprowadzania niepoprawnych wartości danych.
+Na ocenę bardzo dobrą:
+7. 8. Zrealizowane wymagania jak na ocenę dobrą.
+Dodatkowo baza danych wzbogacona o następujące elementy:
+a. rozbudowa projektu o dodatkowe funkcjonalności uzgodnione z prowadzącym
+zajęcia w stosunku do projektu w wersji podstawowej (zaliczenie na ocenę
+dostateczną) – dodatkowe relacje (tabele) i związki 1-n lub n-m,
+b. mechanizm funkcji wbudowanych i wyzwalaczy obsługujący dodatkowe
+relacje(tabele),
+c. różne poziomy dostępu do bazy danych – system autoryzacji.
