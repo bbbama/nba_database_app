@@ -4,7 +4,7 @@ VALUES
  ('Brooklyn Nets','Brooklyn',1967,'Jacque Vaughn'),
  ('Chicago Bulls','Chicago',1966,'Billy Donovan');
 
-INSERT INTO gracz (imie, nazwisko, pozycja, data_urodzenia, id_zespolu)
+INSERT INTO zawodnik (imie, nazwisko, pozycja, data_urodzenia, id_zespolu)
 VALUES
  ('LeBron','James','SF','1984-12-30', 1),
  ('Anthony','Davis','C','1993-03-11', 1),
@@ -14,7 +14,7 @@ VALUES
 INSERT INTO mecz (data_meczu, id_gospodarza, id_goscia, wynik_gospodarza, wynik_goscia)
 VALUES ('2025-11-01', 1, 2, 112, 108);
 
-INSERT INTO statystyki_meczu (id_meczu, id_gracza, minuty, punkty, asysty, zbiorki)
+INSERT INTO statystyki_meczu (id_meczu, id_zawodnika, minuty, punkty, asysty, zbiorki)
 VALUES 
  (1, 1, 36, 28, 8, 7),
  (1, 2, 34, 22, 3, 12),

@@ -329,12 +329,66 @@ Poniżej przedstawiono słownik danych dla każdej tabeli w bazie, zawierający 
 *   `id_nagrody` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator nagrody.
 *   `id_zawodnika` (INTEGER): Klucz obcy, identyfikator zawodnika, który otrzymał nagrodę.
 *   `nazwa_nagrody` (VARCHAR(100)): Nazwa otrzymanej nagrody.
-*   `rok` (SMALLINT): Rok przyznania nagrody (wartość > 1900 i <= bieżący rok).  
+*   `rok` (SMALLINT): Rok przyznania nagrody (wartość > 1900 i <= bieżący rok).
+
+11. Zaprojektowanie operacji na danych (kwerendy)
+
+W tej części dokumentacji przedstawiamy przykładowe operacje na danych, które są kluczowe dla funkcjonowania aplikacji i spełnienia wymagań projektu. Zaprojektowane kwerendy ułatwią dostęp do informacji oraz ich manipulację.
+
+**11.1. Widoki**
+
+Widoki służą do uproszczenia złożonych zapytań i przedstawienia danych w łatwiejszej do zrozumienia formie. Poniżej przedstawiono przykładowe widoki używane w systemie:
+
+**Widok: `widok_zawodnicy_z_zespolem`**
+**Cel:** Umożliwia łatwe przeglądanie podstawowych informacji o zawodnikach wraz z nazwą zespołu, do którego aktualnie należą.
+**SQL:**
+```sql
+CREATE OR REPLACE VIEW widok_zawodnicy_z_zespolem AS
+SELECT
+  z.id_zawodnika,
+  z.imie,
+  z.nazwisko,
+  z.pozycja,
+  zes.nazwa AS nazwa_zespolu
+FROM zawodnik z
+LEFT JOIN zespol zes ON z.id_zespolu = zes.id_zespolu;
+```
+**Opis:** Widok łączy dane z tabel `zawodnik` i `zespol`, aby wyświetlić identyfikator, imię, nazwisko i pozycję zawodnika, a także nazwę jego zespołu. Użycie `LEFT JOIN` sprawia, że widoczne są również dane zawodników, którzy nie są aktualnie przypisani do żadnego zespołu.
+
+**Widok: `widok_srednie_statystyki_zawodnika`**
+**Cel:** Prezentuje średnie statystyki (punkty, asysty, zbiórki) dla każdego zawodnika.
+**SQL:**
+```sql
+CREATE OR REPLACE VIEW widok_srednie_statystyki_zawodnika AS
+SELECT
+  z.id_zawodnika,
+  z.imie || ' ' || z.nazwisko AS zawodnik_nazwa,
+  ROUND(AVG(s.punkty)::numeric,2) AS srednie_punkty,
+  ROUND(AVG(s.asysty)::numeric,2) AS srednie_asysty,
+  ROUND(AVG(s.zbiorki)::numeric,2) AS srednie_zbiorki
+FROM zawodnik z
+JOIN statystyki_meczu s ON z.id_zawodnika = s.id_zawodnika
+GROUP BY z.id_zawodnika, z.imie, z.nazwisko;
+```
+**Opis:** Widok oblicza średnie punkty, asysty i zbiórki dla każdego zawodnika, łącząc dane z tabel `zawodnik` i `statystyki_meczu`. Wyniki są zaokrąglane do dwóch miejsc po przecinku.
+
+**Widok: `widok_wyniki_meczy`**
+**Cel:** Upraszcza przeglądanie wyników meczów, wyświetlając nazwy zespołów zamiast ich identyfikatorów.
+**SQL:**
+```sql
+CREATE OR REPLACE VIEW widok_wyniki_meczy AS
+SELECT m.id_meczu, m.data_meczu,
+  g.nazwa AS gospodarz, m.wynik_gospodarza,
+  z.nazwa AS gosc, m.wynik_goscia
+FROM mecz m
+JOIN zespol g ON m.id_gospodarza = g.id_zespolu
+JOIN zespol z ON m.id_goscia = z.id_zespolu;
+```
 **Opis:** Widok łączy dane z tabel `mecz` i `zespol`, aby pokazać datę meczu, nazwy zespołów gospodarzy i gości oraz ich wyniki.
 
 **11.2. Przykładowe operacje DML (INSERT, UPDATE, DELETE)**
 
-**Operacja: Dodanie nowego zawodnika (`INSERT`)
+**Operacja: Dodanie nowego zawodnika (`INSERT`)**
 *   **Cel:** Umożliwia dodanie nowego zawodnika do bazy danych.
 *   **SQL:**
     ```sql
@@ -343,7 +397,7 @@ Poniżej przedstawiono słownik danych dla każdej tabeli w bazie, zawierający 
     ```
 *   **Opis:** Zapytanie wstawia nowy wiersz do tabeli `zawodnik` z podanymi danymi. `id_zawodnika` zostanie wygenerowane automatycznie dzięki typowi `SERIAL`.
 
-**Operacja: Zmiana zespołu zawodnika (`UPDATE`)
+**Operacja: Zmiana zespołu zawodnika (`UPDATE`)**
 *   **Cel:** Umożliwia przypisanie zawodnika do innego zespołu.
 *   **SQL:**
     ```sql
@@ -353,7 +407,7 @@ Poniżej przedstawiono słownik danych dla każdej tabeli w bazie, zawierający 
     ```
 *   **Opis:** Zapytanie aktualizuje kolumnę `id_zespolu` dla zawodnika o określonym `id_zawodnika`, co w praktyce oznacza jego transfer do innej drużyny.
 
-**Operacja: Usunięcie zawodnika (`DELETE`)
+**Operacja: Usunięcie zawodnika (`DELETE`)**
 *   **Cel:** Umożliwia usunięcie zawodnika z bazy danych.
 *   **SQL:**
     ```sql
@@ -400,5 +454,43 @@ Poniżej przedstawiono słownik danych dla każdej tabeli w bazie, zawierający 
 *   **Opis:** Zapytanie łączy dane ze `statystyki_meczu`, `zawodnik`, `mecz` i `zespol` w celu znalezienia maksymalnej liczby punktów zdobytych w jednym meczu przez zawodnika i wyświetla szczegóły tego osiągnięcia.
 
 
+IV. Projekt funkcjonalny
 
+12. Interfejsy do prezentacji, edycji i obsługi danych
 
+W tym punkcie opiszę, jak wyobrażam sobie wygląd i działanie głównych okienek (formularzy) w mojej aplikacji. Chodzi o to, żeby korzystanie z programu było proste i intuicyjne.
+
+12.1. Formularz do zarządzania zawodnikami
+
+To będzie główne centrum zarządzania zawodnikami. Użytkownik będzie mógł tutaj zobaczyć listę wszystkich graczy, dodać nowego, poprawić dane istniejącego albo go usunąć.
+
+Główne okno - Lista zawodników
+
+Po wejściu w opcję "Zawodnicy", użytkownik zobaczy listę wszystkich graczy.
+
+*   **Co będzie w tym oknie?**
+    *   **Tabelka z zawodnikami**, a w niej kolumny: `Imię`, `Nazwisko`, `Zespół` i `Pozycja`.
+    *   **Na górze okna** umieszczę kilka przydatnych rzeczy:
+        *   Duży przycisk **"Dodaj nowego zawodnika"**.
+        *   **Okienko do szukania** po nazwisku, żeby szybko kogoś znaleźć.
+        *   **Rozwijaną listę z zespołami**, żeby można było wyświetlić tylko graczy z jednej drużyny.
+    *   **Przy każdym zawodniku** w tabeli będą dwa małe przyciski: **"Edytuj"** i **"Usuń"**.
+
+Okno dodawania i edycji zawodnika
+
+To okienko będzie wyskakiwać po kliknięciu "Dodaj nowego zawodnika" albo "Edytuj".
+
+*   **Co będzie w tym formularzu?**
+    *   Zwykłe pola do wpisania **imienia** i **nazwiska**.
+    *   Rozwijana lista z pozycjami, np. "Rozgrywający", "Środkowy". Dzięki temu dane będą spójne.
+    *   Specjalne pole **kalendarza** do wybrania daty urodzenia.
+    *   Kolejna rozwijana lista, tym razem **z nazwami zespołów** pobranymi z bazy. Będzie też opcja "Brak zespołu".
+*   **Na dole formularza:**
+    *   Przycisk **"Zapisz"**, który zapisze zmiany w bazie.
+    *   Przycisk **"Anuluj"**, który zamknie okienko bez zapisywania.
+
+Jak to będzie działać w praktyce?
+
+1.  **Gdy chcemy dodać zawodnika:** Klikamy "Dodaj nowego zawodnika". Wyskoczy pusty formularz. Wypełniamy dane, klikamy "Zapisz" – i gotowe, nowy zawodnik pojawia się na liście. W tle poleci komenda `INSERT`.
+2.  **Gdy chcemy coś poprawić:** Klikamy "Edytuj" przy kimś na liście. Wyskoczy ten sam formularz, ale już wypełniony jego danymi. Zmieniamy co trzeba, klikamy "Zapisz", a dane w bazie się zaktualizują przez komendę `UPDATE`.
+3.  **Gdy chcemy kogoś usunąć:** Klikamy "Usuń". Program dla bezpieczeństwa zapyta "Czy na pewno?". Jeśli klikniemy "Tak", poleci komenda `DELETE` i zawodnik zniknie z listy.

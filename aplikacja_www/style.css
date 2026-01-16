@@ -1,0 +1,136 @@
+/* Prosty arkusz stylów dla aplikacji NBA */
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #002D62; /* Ciemny niebieski */
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 3px solid #ED174C; /* Czerwony */
+}
+
+h1, h2 {
+    margin-bottom: 0.5rem;
+}
+
+nav {
+    background: #333;
+    padding: 0.5rem;
+}
+
+nav ul {
+    padding: 0;
+    list-style: none;
+    text-align: center;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+nav a:hover {
+    color: #ED174C;
+}
+
+main {
+    padding: 20px;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 5px;
+    max-width: 1200px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+a.button, button {
+    display: inline-block;
+    background: #002D62;
+    color: #fff;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+a.button.edit {
+    background: #f0ad4e;
+}
+
+a.button.delete {
+    background: #d9534f;
+}
+
+a.button:hover, button:hover {
+    opacity: 0.9;
+}
+
+form {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="date"],
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
