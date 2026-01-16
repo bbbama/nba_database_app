@@ -12,10 +12,12 @@
     <nav>
         <ul>
             <li><a href="index.php">Strona główna</a></li>
-            <li><a href="zawodnicy.php">Zawodnicy</a></li>
-            <li><a href="zespoly.php">Zespoły</a></li>
-            <li><a href="mecze.php">Mecze</a></li>
+            <li><a href="zawodnicy/">Zawodnicy</a></li>
+            <li><a href="zespoly/">Zespoły</a></li>
+            <li><a href="mecze/">Mecze</a></li>
             <li><a href="raporty.php">Raporty</a></li>
+            <li><a href="areny/">Areny</a></li>
+            <li><a href="sezony/">Sezony</a></li>
         </ul>
     </nav>
     <main>

@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once '../db.php';
 
 $zawodnik = [
     'id_zawodnika' => '',
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
             }
             // Przekierowanie po sukcesie
-            header('Location: zawodnicy.php');
+            header('Location: index.php');
             exit;
         } catch (PDOException $e) {
             $errors[] = "Błąd zapisu do bazy danych: " . $e->getMessage();
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Zawodnika</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <header>
@@ -99,11 +99,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <nav>
         <ul>
-            <li><a href="index.php">Strona główna</a></li>
-            <li><a href="zawodnicy.php">Zawodnicy</a></li>
-            <li><a href="zespoly.php">Zespoły</a></li>
-            <li><a href="mecze.php">Mecze</a></li>
-            <li><a href="raporty.php">Raporty</a></li>
+            <li><a href="../index.php">Strona główna</a></li>
+            <li><a href="index.php">Zawodnicy</a></li>
+            <li><a href="../zespoly/">Zespoły</a></li>
+            <li><a href="../mecze/">Mecze</a></li>
+            <li><a href="../raporty.php">Raporty</a></li>
+            <li><a href="../areny/">Areny</a></li>
+            <li><a href="../sezony/">Sezony</a></li>
         </ul>
     </nav>
     <main>
@@ -148,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div>
                 <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj zawodnika' ?></button>
-                <a href="zawodnicy.php" class="button">Anuluj</a>
+                <a href="index.php" class="button">Anuluj</a>
             </div>
         </form>
     </main>

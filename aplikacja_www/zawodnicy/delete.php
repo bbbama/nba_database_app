@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once '../db.php';
 
 // Sprawdzenie, czy podano ID
 if (!isset($_GET['id'])) {
@@ -14,8 +14,7 @@ try {
     $stmt = $pdo->prepare('DELETE FROM zawodnik WHERE id_zawodnika = ?');
     $stmt->execute([$id_zawodnika]);
     
-    // Przekierowanie z powrotem na listę
-    header('Location: zawodnicy.php');
+header('Location: index.php');
     exit;
 
 } catch (PDOException $e) {

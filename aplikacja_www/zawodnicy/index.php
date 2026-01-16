@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once '../db.php';
 
 try {
     $pdo = getDbConnection();
@@ -16,7 +16,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>Zarządzanie Zawodnikami</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <header>
@@ -24,16 +24,18 @@ try {
     </header>
     <nav>
         <ul>
-            <li><a href="index.php">Strona główna</a></li>
-            <li><a href="zawodnicy.php">Zawodnicy</a></li>
-            <li><a href="zespoly.php">Zespoły</a></li>
-            <li><a href="mecze.php">Mecze</a></li>
-            <li><a href="raporty.php">Raporty</a></li>
+            <li><a href="../index.php">Strona główna</a></li>
+            <li><a href="index.php">Zawodnicy</a></li>
+            <li><a href="../zespoly/">Zespoły</a></li>
+            <li><a href="../mecze/">Mecze</a></li>
+            <li><a href="../raporty.php">Raporty</a></li>
+            <li><a href="../areny/">Areny</a></li>
+            <li><a href="../sezony/">Sezony</a></li>
         </ul>
     </nav>
     <main>
         <h2>Lista Zawodników</h2>
-        <a href="zawodnik_form.php" class="button">Dodaj nowego zawodnika</a>
+        <a href="form.php" class="button">Dodaj nowego zawodnika</a>
         <table>
             <thead>
                 <tr>
@@ -53,8 +55,8 @@ try {
                         <td><?= htmlspecialchars($zawodnik['pozycja']) ?></td>
                         <td><?= htmlspecialchars($zawodnik['nazwa_zespolu'] ?? 'Brak zespołu') ?></td>
                         <td>
-                            <a href="zawodnik_form.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button edit">Edytuj</a>
-                            <a href="zawodnik_delete.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć tego zawodnika?')">Usuń</a>
+                            <a href="form.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button edit">Edytuj</a>
+                            <a href="delete.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć tego zawodnika?')">Usuń</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
