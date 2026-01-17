@@ -27,9 +27,14 @@ try {
             <li><a href="../zawodnicy/">Zawodnicy</a></li>
             <li><a href="../zespoly/">Zespoły</a></li>
             <li><a href="../mecze/">Mecze</a></li>
-            <li><a href="../raporty.php">Raporty</a></li>
+            <li><a href="../raporty/">Raporty</a></li>
             <li><a href="index.php">Areny</a></li>
             <li><a href="../sezony/">Sezony</a></li>
+            <li><a href="../trener/">Trenerzy</a></li>
+            <li><a href="../kontrakt/">Kontrakty</a></li>
+            <li><a href="../kontuzja/">Kontuzje</a></li>
+            <li><a href="../nagroda/">Nagrody</a></li>
+            <li><a href="../tabela_ligowa/">Tabela Ligowa</a></li>
         </ul>
     </nav>
     <main>

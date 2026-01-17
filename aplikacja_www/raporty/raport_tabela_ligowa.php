@@ -1,6 +1,8 @@
 <?php
 require_once '../db.php';
 
+$pdo = getDbConnection();
+
 $seasons = [];
 try {
     $stmt = $pdo->query("SELECT id_sezonu, rok_rozpoczecia, rok_zakonczenia FROM sezon ORDER BY rok_rozpoczecia DESC");

@@ -1,6 +1,8 @@
 <?php
 require_once '../db.php';
 
+$pdo = getDbConnection();
+
 $sezon = [
     'id_sezonu' => '',
     'rok_rozpoczecia' => '',
@@ -15,7 +17,6 @@ if (isset($_GET['id'])) {
     $id_sezonu = $_GET['id'];
 
     try {
-        $pdo = getDbConnection();
         $stmt = $pdo->prepare('SELECT * FROM sezon WHERE id_sezonu = ?');
         $stmt->execute([$id_sezonu]);
         $sezon = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -46,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         try {
-            $pdo = getDbConnection();
             if ($is_edit) {
                 // Aktualizacja
                 $sql = "UPDATE sezon SET rok_rozpoczecia = ?, rok_zakonczenia = ? WHERE id_sezonu = ?";

@@ -22,6 +22,11 @@ require_once '../db.php';
             <li><a href="index.php">Raporty</a></li>
             <li><a href="../areny/">Areny</a></li>
             <li><a href="../sezony/">Sezony</a></li>
+            <li><a href="../trener/">Trenerzy</a></li>
+            <li><a href="../kontrakt/">Kontrakty</a></li>
+            <li><a href="../kontuzja/">Kontuzje</a></li>
+            <li><a href="../nagroda/">Nagrody</a></li>
+            <li><a href="../tabela_ligowa/">Tabela Ligowa</a></li>
         </ul>
     </nav>
     <main>

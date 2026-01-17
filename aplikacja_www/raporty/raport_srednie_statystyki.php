@@ -1,6 +1,8 @@
 <?php
 require_once '../db.php';
 
+$pdo = getDbConnection();
+
 $sql = "SELECT * FROM widok_srednie_statystyki_zawodnika ORDER BY srednie_punkty DESC";
 $stmt = $pdo->query($sql);
 $statystyki = $stmt->fetchAll(PDO::FETCH_ASSOC);

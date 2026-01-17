@@ -1,6 +1,8 @@
 <?php
 require_once '../db.php';
 
+$pdo = getDbConnection();
+
 $player_record = null;
 try {
     $sql = "SELECT

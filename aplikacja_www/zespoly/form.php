@@ -1,6 +1,8 @@
 <?php
 require_once '../db.php';
 
+$pdo = getDbConnection();
+
 $zespol = [
     'id_zespolu' => '',
     'nazwa' => '',
@@ -14,7 +16,6 @@ $is_edit = false;
 
 // Pobranie listy aren do dropdowna
 try {
-    $pdo = getDbConnection();
     $areny_stmt = $pdo->query('SELECT id_arena, nazwa FROM arena ORDER BY nazwa');
     $areny = $areny_stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
