@@ -28,7 +28,7 @@ try {
             <li><a href="../zawodnicy/">Zawodnicy</a></li>
             <li><a href="../zespoly/">Zespoły</a></li>
             <li><a href="index.php">Mecze</a></li>
-            <li><a href="../raporty.php">Raporty</a></li>
+            <li><a href="../raporty/">Raporty</a></li>
             <li><a href="../areny/">Areny</a></li>
             <li><a href="../sezony/">Sezony</a></li>
         </ul>
