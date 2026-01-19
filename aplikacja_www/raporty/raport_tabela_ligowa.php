@@ -17,14 +17,14 @@ $league_table = [];
 if ($selected_season_id) {
     try {
         $sql = "SELECT
-                    tl.miejsce_w_tabeli,
-                    z.nazwa AS nazwa_zespolu,
-                    tl.liczba_zwyciestw,
-                    tl.liczba_porazek
-                FROM tabela_ligowa tl
-                JOIN zespol z ON tl.id_zespolu = z.id_zespolu
-                WHERE tl.id_sezonu = :sezon_id
-                ORDER BY tl.miejsce_w_tabeli ASC";
+                    wt.miejsce_w_tabeli,
+                    wt.nazwa_zespolu,
+                    wt.liczba_zwyciestw,
+                    wt.liczba_porazek,
+                    wt.procent_zwyciestw
+                FROM widok_tabeli_ligowej wt
+                WHERE wt.id_sezonu = :sezon_id
+                ORDER BY wt.miejsce_w_tabeli ASC";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':sezon_id', $selected_season_id, PDO::PARAM_INT);
         $stmt->execute();
@@ -81,6 +81,7 @@ if ($selected_season_id) {
                         <th>Zespół</th>
                         <th>Zwycięstwa</th>
                         <th>Porażki</th>
+                        <th>Procent Zwycięstw</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,6 +91,7 @@ if ($selected_season_id) {
                         <td><?= htmlspecialchars($team['nazwa_zespolu']) ?></td>
                         <td><?= htmlspecialchars($team['liczba_zwyciestw']) ?></td>
                         <td><?= htmlspecialchars($team['liczba_porazek']) ?></td>
+                        <td><?= htmlspecialchars(sprintf("%.3f", $team['procent_zwyciestw'])) ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>

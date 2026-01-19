@@ -4,7 +4,7 @@ require_once '../db.php';
 try {
     $pdo = getDbConnection();
     // Używamy widoku, aby pobrać dane meczów wraz z nazwami zespołów
-    $stmt = $pdo->query('SELECT id_meczu, data_meczu, gospodarz, wynik_gospodarza, gosc, wynik_goscia FROM widok_wyniki_meczy ORDER BY data_meczu DESC');
+    $stmt = $pdo->query('SELECT id_meczu, data_meczu, sezon, gospodarz, wynik_gospodarza, gosc, wynik_goscia FROM widok_wyniki_meczy ORDER BY data_meczu DESC');
     $mecze = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Błąd przy pobieraniu danych: " . $e->getMessage());
@@ -45,6 +45,7 @@ try {
             <thead>
                 <tr>
                     <th>Data</th>
+                    <th>Sezon</th>
                     <th>Gospodarz</th>
                     <th>Wynik</th>
                     <th>Gość</th>
@@ -56,6 +57,7 @@ try {
                     <?php foreach ($mecze as $mecz): ?>
                     <tr>
                         <td><?= htmlspecialchars($mecz['data_meczu']) ?></td>
+                        <td><?= htmlspecialchars($mecz['sezon']) ?></td>
                         <td><?= htmlspecialchars($mecz['gospodarz']) ?></td>
                         <td><?= htmlspecialchars($mecz['wynik_gospodarza']) ?> : <?= htmlspecialchars($mecz['wynik_goscia']) ?></td>
                         <td><?= htmlspecialchars($mecz['gosc']) ?></td>
@@ -68,7 +70,7 @@ try {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="5">Brak danych o meczach w bazie.</td>
+                        <td colspan="6">Brak danych o meczach w bazie.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

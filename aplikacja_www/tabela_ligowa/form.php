@@ -159,11 +159,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div>
                 <label for="liczba_zwyciestw">Liczba zwycięstw:</label>
-                <input type="number" id="liczba_zwyciestw" name="liczba_zwyciestw" value="<?= htmlspecialchars($entry['liczba_zwyciestw']) ?>" required min="0">
+                <input type="number" id="liczba_zwyciestw" name="liczba_zwyciestw" value="<?= htmlspecialchars($entry['liczba_zwyciestw']) ?>" required min="0" readonly>
             </div>
             <div>
                 <label for="liczba_porazek">Liczba porażek:</label>
-                <input type="number" id="liczba_porazek" name="liczba_porazek" value="<?= htmlspecialchars($entry['liczba_porazek']) ?>" required min="0">
+                <input type="number" id="liczba_porazek" name="liczba_porazek" value="<?= htmlspecialchars($entry['liczba_porazek']) ?>" required min="0" readonly>
             </div>
             <div>
                 <label for="miejsce_w_tabeli">Miejsce w tabeli:</label>
