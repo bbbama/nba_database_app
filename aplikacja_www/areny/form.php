@@ -75,67 +75,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$pageTitle = ($is_edit ? 'Edytuj' : 'Dodaj') . ' Arenę';
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Arenę</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <header>
-        <h1><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Arenę</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="../index.php">Strona główna</a></li>
-            <li><a href="../zawodnicy/">Zawodnicy</a></li>
-            <li><a href="../zespoly/">Zespoły</a></li>
-            <li><a href="../mecze/">Mecze</a></li>
-            <li><a href="../raporty.php">Raporty</a></li>
-            <li><a href="index.php">Areny</a></li>
-            <li><a href="../sezony/">Sezony</a></li>
-        </ul>
-    </nav>
-    <main>
-        <?php if (!empty($errors)): ?>
-            <div class="errors">
-                <p>Wystąpiły błędy:</p>
-                <ul>
-                    <?php foreach ($errors as $error): ?>
-                        <li><?= htmlspecialchars($error) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
+<main>
+    <?php if (!empty($errors)): ?>
+        <div class="errors">
+            <p>Wystąpiły błędy:</p>
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-        <form method="POST">
-            <div>
-                <label for="nazwa">Nazwa:</label>
-                <input type="text" id="nazwa" name="nazwa" value="<?= htmlspecialchars($arena['nazwa']) ?>" required>
-            </div>
-            <div>
-                <label for="miasto">Miasto:</label>
-                <input type="text" id="miasto" name="miasto" value="<?= htmlspecialchars($arena['miasto']) ?>">
-            </div>
-            <div>
-                <label for="pojemnosc">Pojemność:</label>
-                <input type="number" id="pojemnosc" name="pojemnosc" value="<?= htmlspecialchars($arena['pojemnosc']) ?>" required min="1">
-            </div>
-            <div>
-                <label for="rok_otwarcia">Rok otwarcia:</label>
-                <input type="number" id="rok_otwarcia" name="rok_otwarcia" value="<?= htmlspecialchars($arena['rok_otwarcia']) ?>" min="1851" max="<?= date('Y') ?>">
-            </div>
-            <div>
-                <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj arenę' ?></button>
-                <a href="index.php" class="button">Anuluj</a>
-            </div>
-        </form>
-    </main>
-    <footer>
-        <p>Projekt bazy danych - 2024</p>
-    </footer>
-</body>
-</html>
+    <form method="POST">
+        <div>
+            <label for="nazwa">Nazwa:</label>
+            <input type="text" id="nazwa" name="nazwa" value="<?= htmlspecialchars($arena['nazwa']) ?>" required>
+        </div>
+        <div>
+            <label for="miasto">Miasto:</label>
+            <input type="text" id="miasto" name="miasto" value="<?= htmlspecialchars($arena['miasto']) ?>">
+        </div>
+        <div>
+            <label for="pojemnosc">Pojemność:</label>
+            <input type="number" id="pojemnosc" name="pojemnosc" value="<?= htmlspecialchars($arena['pojemnosc']) ?>" required min="1">
+        </div>
+        <div>
+            <label for="rok_otwarcia">Rok otwarcia:</label>
+            <input type="number" id="rok_otwarcia" name="rok_otwarcia" value="<?= htmlspecialchars($arena['rok_otwarcia']) ?>" min="1851" max="<?= date('Y') ?>">
+        </div>
+        <div>
+            <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj arenę' ?></button>
+            <a href="index.php" class="button">Anuluj</a>
+        </div>
+    </form>
+<?php require_once $basePath . 'layout/footer.php'; ?>

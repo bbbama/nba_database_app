@@ -89,87 +89,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$pageTitle = ($is_edit ? 'Edytuj' : 'Dodaj') . ' Kontrakt';
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Kontrakt</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <header>
-        <h1><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Kontrakt</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="../index.php">Strona główna</a></li>
-            <li><a href="../zawodnicy/">Zawodnicy</a></li>
-            <li><a href="../zespoly/">Zespoły</a></li>
-            <li><a href="../mecze/">Mecze</a></li>
-            <li><a href="../raporty.php">Raporty</a></li>
-            <li><a href="../areny/">Areny</a></li>
-            <li><a href="../sezony/">Sezony</a></li>
-            <li><a href="../trener/">Trenerzy</a></li>
-            <li><a href="index.php">Kontrakty</a></li>
-        </ul>
-    </nav>
-    <main>
-        <?php if (!empty($errors)): ?>
-            <div class="errors">
-                <p>Wystąpiły błędy:</p>
-                <ul>
-                    <?php foreach ($errors as $error): ?>
-                        <li><?= htmlspecialchars($error) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
+<main>
+    <?php if (!empty($errors)): ?>
+        <div class="errors">
+            <p>Wystąpiły błędy:</p>
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-        <form method="POST">
-            <div>
-                <label for="id_zawodnika">Zawodnik:</label>
-                <select id="id_zawodnika" name="id_zawodnika" required>
-                    <option value="">-- Wybierz zawodnika --</option>
-                    <?php foreach ($zawodnicy as $zawodnik): ?>
-                        <option value="<?= $zawodnik['id_zawodnika'] ?>" <?= ($kontrakt['id_zawodnika'] == $zawodnik['id_zawodnika']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($zawodnik['imie'] . ' ' . $zawodnik['nazwisko']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <label for="id_zespolu">Zespół:</label>
-                <select id="id_zespolu" name="id_zespolu" required>
-                    <option value="">-- Wybierz zespół --</option>
-                    <?php foreach ($zespoly as $zespol): ?>
-                        <option value="<?= $zespol['id_zespolu'] ?>" <?= ($kontrakt['id_zespolu'] == $zespol['id_zespolu']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($zespol['nazwa']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <label for="data_poczatek">Data początku:</label>
-                <input type="date" id="data_poczatek" name="data_poczatek" value="<?= htmlspecialchars($kontrakt['data_poczatek']) ?>" required>
-            </div>
-            <div>
-                <label for="data_koniec">Data końca:</label>
-                <input type="date" id="data_koniec" name="data_koniec" value="<?= htmlspecialchars($kontrakt['data_koniec']) ?>" required>
-            </div>
-            <div>
-                <label for="wynagrodzenie_roczne">Wynagrodzenie roczne:</label>
-                <input type="number" step="0.01" id="wynagrodzenie_roczne" name="wynagrodzenie_roczne" value="<?= htmlspecialchars($kontrakt['wynagrodzenie_roczne']) ?>" required min="0">
-            </div>
-            <div>
-                <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj kontrakt' ?></button>
-                <a href="index.php" class="button">Anuluj</a>
-            </div>
-        </form>
-    </main>
-    <footer>
-        <p>Projekt bazy danych - 2024</p>
-    </footer>
-</body>
-</html>
+    <form method="POST">
+        <div>
+            <label for="id_zawodnika">Zawodnik:</label>
+            <select id="id_zawodnika" name="id_zawodnika" required>
+                <option value="">-- Wybierz zawodnika --</option>
+                <?php foreach ($zawodnicy as $zawodnik): ?>
+                    <option value="<?= $zawodnik['id_zawodnika'] ?>" <?= ($kontrakt['id_zawodnika'] == $zawodnik['id_zawodnika']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($zawodnik['imie'] . ' ' . $zawodnik['nazwisko']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <label for="id_zespolu">Zespół:</label>
+            <select id="id_zespolu" name="id_zespolu" required>
+                <option value="">-- Wybierz zespół --</option>
+                <?php foreach ($zespoly as $zespol): ?>
+                    <option value="<?= $zespol['id_zespolu'] ?>" <?= ($kontrakt['id_zespolu'] == $zespol['id_zespolu']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($zespol['nazwa']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <label for="data_poczatek">Data początku:</label>
+            <input type="date" id="data_poczatek" name="data_poczatek" value="<?= htmlspecialchars($kontrakt['data_poczatek']) ?>" required>
+        </div>
+        <div>
+            <label for="data_koniec">Data końca:</label>
+            <input type="date" id="data_koniec" name="data_koniec" value="<?= htmlspecialchars($kontrakt['data_koniec']) ?>" required>
+        </div>
+        <div>
+            <label for="wynagrodzenie_roczne">Wynagrodzenie roczne:</label>
+            <input type="number" step="0.01" id="wynagrodzenie_roczne" name="wynagrodzenie_roczne" value="<?= htmlspecialchars($kontrakt['wynagrodzenie_roczne']) ?>" required min="0">
+        </div>
+        <div>
+            <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj kontrakt' ?></button>
+            <a href="index.php" class="button">Anuluj</a>
+        </div>
+    </form>
+<?php require_once $basePath . 'layout/footer.php'; ?>

@@ -94,96 +94,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$pageTitle = ($is_edit ? 'Edytuj' : 'Dodaj') . ' Mecz';
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Mecz</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <header>
-        <h1><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Mecz</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="../index.php">Strona główna</a></li>
-            <li><a href="../zawodnicy/">Zawodnicy</a></li>
-            <li><a href="../zespoly/">Zespoły</a></li>
-            <li><a href="index.php">Mecze</a></li>
-            <li><a href="../raporty.php">Raporty</a></li>
-            <li><a href="../areny/">Areny</a></li>
-            <li><a href="../sezony/">Sezony</a></li>
-        </ul>
-    </nav>
-    <main>
-        <?php if (!empty($errors)): ?>
-            <div class="errors">
-                <p>Wystąpiły błędy:</p>
-                <ul>
-                    <?php foreach ($errors as $error): ?>
-                        <li><?= htmlspecialchars($error) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
+<main>
+    <?php if (!empty($errors)): ?>
+        <div class="errors">
+            <p>Wystąpiły błędy:</p>
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-        <form method="POST">
-            <div>
-                <label for="data_meczu">Data meczu:</label>
-                <input type="date" id="data_meczu" name="data_meczu" value="<?= htmlspecialchars($mecz['data_meczu']) ?>" required>
-            </div>
-            <div>
-                <label for="id_gospodarza">Gospodarz:</label>
-                <select id="id_gospodarza" name="id_gospodarza" required>
-                    <option value="">-- Wybierz zespół --</option>
-                    <?php foreach ($zespoly as $zespol): ?>
-                        <option value="<?= $zespol['id_zespolu'] ?>" <?= ($mecz['id_gospodarza'] == $zespol['id_zespolu']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($zespol['nazwa']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <label for="id_goscia">Gość:</label>
-                <select id="id_goscia" name="id_goscia" required>
-                    <option value="">-- Wybierz zespół --</option>
-                    <?php foreach ($zespoly as $zespol): ?>
-                        <option value="<?= $zespol['id_zespolu'] ?>" <?= ($mecz['id_goscia'] == $zespol['id_zespolu']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($zespol['nazwa']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <label for="wynik_gospodarza">Wynik gospodarza:</label>
-                <input type="number" id="wynik_gospodarza" name="wynik_gospodarza" value="<?= htmlspecialchars($mecz['wynik_gospodarza']) ?>">
-            </div>
-            <div>
-                <label for="wynik_goscia">Wynik gościa:</label>
-                <input type="number" id="wynik_goscia" name="wynik_goscia" value="<?= htmlspecialchars($mecz['wynik_goscia']) ?>">
-            </div>
-            <div>
-                <label for="id_sezonu">Sezon:</label>
-                <select id="id_sezonu" name="id_sezonu">
-                    <option value="">-- Brak sezonu --</option>
-                    <?php foreach ($sezony as $sezon): ?>
-                        <option value="<?= $sezon['id_sezonu'] ?>" <?= ($mecz['id_sezonu'] == $sezon['id_sezonu']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($sezon['rok_rozpoczecia']) ?>/<?= htmlspecialchars($sezon['rok_zakonczenia']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj mecz' ?></button>
-                <a href="index.php" class="button">Anuluj</a>
-            </div>
-        </form>
-    </main>
-    <footer>
-        <p>Projekt bazy danych - 2024</p>
-    </footer>
-</body>
-</html>
+    <form method="POST">
+        <div>
+            <label for="data_meczu">Data meczu:</label>
+            <input type="date" id="data_meczu" name="data_meczu" value="<?= htmlspecialchars($mecz['data_meczu']) ?>" required>
+        </div>
+        <div>
+            <label for="id_gospodarza">Gospodarz:</label>
+            <select id="id_gospodarza" name="id_gospodarza" required>
+                <option value="">-- Wybierz zespół --</option>
+                <?php foreach ($zespoly as $zespol): ?>
+                    <option value="<?= $zespol['id_zespolu'] ?>" <?= ($mecz['id_gospodarza'] == $zespol['id_zespolu']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($zespol['nazwa']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <label for="id_goscia">Gość:</label>
+            <select id="id_goscia" name="id_goscia" required>
+                <option value="">-- Wybierz zespół --</option>
+                <?php foreach ($zespoly as $zespol): ?>
+                    <option value="<?= $zespol['id_zespolu'] ?>" <?= ($mecz['id_goscia'] == $zespol['id_zespolu']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($zespol['nazwa']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <label for="wynik_gospodarza">Wynik gospodarza:</label>
+            <input type="number" id="wynik_gospodarza" name="wynik_gospodarza" value="<?= htmlspecialchars($mecz['wynik_gospodarza']) ?>">
+        </div>
+        <div>
+            <label for="wynik_goscia">Wynik gościa:</label>
+            <input type="number" id="wynik_goscia" name="wynik_goscia" value="<?= htmlspecialchars($mecz['wynik_goscia']) ?>">
+        </div>
+        <div>
+            <label for="id_sezonu">Sezon:</label>
+            <select id="id_sezonu" name="id_sezonu">
+                <option value="">-- Brak sezonu --</option>
+                <?php foreach ($sezony as $sezon): ?>
+                    <option value="<?= $sezon['id_sezonu'] ?>" <?= ($mecz['id_sezonu'] == $sezon['id_sezonu']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($sezon['rok_rozpoczecia']) ?>/<?= htmlspecialchars($sezon['rok_zakonczenia']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj mecz' ?></button>
+            <a href="index.php" class="button">Anuluj</a>
+        </div>
+    </form>
+<?php require_once $basePath . 'layout/footer.php'; ?>

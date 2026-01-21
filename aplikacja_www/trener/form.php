@@ -86,80 +86,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$pageTitle = ($is_edit ? 'Edytuj' : 'Dodaj') . ' Trenera';
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Trenera</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <header>
-        <h1><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Trenera</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="../index.php">Strona główna</a></li>
-            <li><a href="../zawodnicy/">Zawodnicy</a></li>
-            <li><a href="../zespoly/">Zespoły</a></li>
-            <li><a href="../mecze/">Mecze</a></li>
-            <li><a href="../raporty.php">Raporty</a></li>
-            <li><a href="../areny/">Areny</a></li>
-            <li><a href="../sezony/">Sezony</a></li>
-            <li><a href="index.php">Trenerzy</a></li>
-        </ul>
-    </nav>
-    <main>
-        <?php if (!empty($errors)): ?>
-            <div class="errors">
-                <p>Wystąpiły błędy:</p>
-                <ul>
-                    <?php foreach ($errors as $error): ?>
-                        <li><?= htmlspecialchars($error) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
+<main>
+    <?php if (!empty($errors)): ?>
+        <div class="errors">
+            <p>Wystąpiły błędy:</p>
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-        <form method="POST">
-            <div>
-                <label for="imie">Imię:</label>
-                <input type="text" id="imie" name="imie" value="<?= htmlspecialchars($trener['imie']) ?>" required>
-            </div>
-            <div>
-                <label for="nazwisko">Nazwisko:</label>
-                <input type="text" id="nazwisko" name="nazwisko" value="<?= htmlspecialchars($trener['nazwisko']) ?>" required>
-            </div>
-            <div>
-                <label for="rola">Rola:</label>
-                <select id="rola" name="rola" required>
-                    <option value="">-- Wybierz rolę --</option>
-                    <option value="glowny" <?= ($trener['rola'] == 'glowny') ? 'selected' : '' ?>>Główny</option>
-                    <option value="asystent" <?= ($trener['rola'] == 'asystent') ? 'selected' : '' ?>>Asystent</option>
-                    <option value="przygotowanie fizyczne" <?= ($trener['rola'] == 'przygotowanie fizyczne') ? 'selected' : '' ?>>Przygotowanie fizyczne</option>
-                </select>
-            </div>
-            <div>
-                <label for="id_zespolu">Zespół:</label>
-                <select id="id_zespolu" name="id_zespolu">
-                    <option value="">-- Brak zespołu --</option>
-                    <?php foreach ($zespoly as $zespol): ?>
-                        <option value="<?= $zespol['id_zespolu'] ?>" <?= ($trener['id_zespolu'] == $zespol['id_zespolu']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($zespol['nazwa']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj trenera' ?></button>
-                <a href="index.php" class="button">Anuluj</a>
-            </div>
-        </form>
-    </main>
-    <footer>
-        <p>Projekt bazy danych - 2024</p>
-    </footer>
-</body>
-</html>
+    <form method="POST">
+        <div>
+            <label for="imie">Imię:</label>
+            <input type="text" id="imie" name="imie" value="<?= htmlspecialchars($trener['imie']) ?>" required>
+        </div>
+        <div>
+            <label for="nazwisko">Nazwisko:</label>
+            <input type="text" id="nazwisko" name="nazwisko" value="<?= htmlspecialchars($trener['nazwisko']) ?>" required>
+        </div>
+        <div>
+            <label for="rola">Rola:</label>
+            <select id="rola" name="rola" required>
+                <option value="">-- Wybierz rolę --</option>
+                <option value="glowny" <?= ($trener['rola'] == 'glowny') ? 'selected' : '' ?>>Główny</option>
+                <option value="asystent" <?= ($trener['rola'] == 'asystent') ? 'selected' : '' ?>>Asystent</option>
+                <option value="przygotowanie fizyczne" <?= ($trener['rola'] == 'przygotowanie fizyczne') ? 'selected' : '' ?>>Przygotowanie fizyczne</option>
+            </select>
+        </div>
+        <div>
+            <label for="id_zespolu">Zespół:</label>
+            <select id="id_zespolu" name="id_zespolu">
+                <option value="">-- Brak zespołu --</option>
+                <?php foreach ($zespoly as $zespol): ?>
+                    <option value="<?= $zespol['id_zespolu'] ?>" <?= ($trener['id_zespolu'] == $zespol['id_zespolu']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($zespol['nazwa']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj trenera' ?></button>
+            <a href="index.php" class="button">Anuluj</a>
+        </div>
+    </form>
+<?php require_once $basePath . 'layout/footer.php'; ?>

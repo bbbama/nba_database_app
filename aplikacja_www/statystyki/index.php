@@ -88,101 +88,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$pageTitle = "Statystyki Meczu: " . htmlspecialchars($mecz['nazwa_gospodarza']) . " vs " . htmlspecialchars($mecz['nazwa_goscia']);
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Statystyki Meczu</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <header>
-        <h1>Statystyki Meczu</h1>
-        <h3><?= htmlspecialchars($mecz['nazwa_gospodarza']) ?> vs <?= htmlspecialchars($mecz['nazwa_goscia']) ?> (<?= htmlspecialchars($mecz['data_meczu']) ?>)</h3>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="../index.php">Strona główna</a></li>
-            <li><a href="../zawodnicy/">Zawodnicy</a></li>
-            <li><a href="../zespoly/">Zespoły</a></li>
-            <li><a href="../mecze/">Mecze</a></li>
-            <li><a href="../raporty/">Raporty</a></li>
-            <li><a href="../areny/">Areny</a></li>
-            <li><a href="../sezony/">Sezony</a></li>
-            <li><a href="../trener/">Trenerzy</a></li>
-            <li><a href="../kontrakt/">Kontrakty</a></li>
-            <li><a href="../kontuzja/">Kontuzje</a></li>
-            <li><a href="../nagroda/">Nagrody</a></li>
-            <li><a href="../tabela_ligowa/">Tabela Ligowa</a></li>
-            <li><a href="../mecze/">Powrót do listy meczów</a></li>
-        </ul>
-    </nav>
-    <main>
-        <?php if (!empty($errors)): ?>
-            <div class="errors" style="color: red;"><?= htmlspecialchars($errors[0]) ?></div>
-        <?php endif; ?>
-        <?php if ($success_message): ?>
-            <div class="success" style="color: green;"><?= htmlspecialchars($success_message) ?></div>
-        <?php endif; ?>
+<main>
+    <?php if (!empty($errors)): ?>
+        <div class="errors" style="color: red;"><?= htmlspecialchars($errors[0]) ?></div>
+    <?php endif; ?>
+    <?php if ($success_message): ?>
+        <div class="success" style="color: green;"><?= htmlspecialchars($success_message) ?></div>
+    <?php endif; ?>
 
-        <form method="POST">
-            <h3>Gospodarze: <?= htmlspecialchars($mecz['nazwa_gospodarza']) ?></h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Zawodnik</th>
-                        <th>Minuty</th>
-                        <th>Punkty</th>
-                        <th>Asysty</th>
-                        <th>Zbiórki</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($zawodnicy as $zawodnik): if ($zawodnik['id_zespolu'] == $mecz['id_gospodarza']): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($zawodnik['imie'] . ' ' . $zawodnik['nazwisko']) ?></td>
-                        <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][minuty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['minuty'] ?? '') ?>"></td>
-                        <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][punkty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['punkty'] ?? '') ?>"></td>
-                        <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][asysty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['asysty'] ?? '') ?>"></td>
-                        <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][zbiorki]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['zbiorki'] ?? '') ?>"></td>
-                    </tr>
-                    <?php endif; endforeach; ?>
-                </tbody>
-            </table>
+    <form method="POST">
+        <h3>Gospodarze: <?= htmlspecialchars($mecz['nazwa_gospodarza']) ?></h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Zawodnik</th>
+                    <th>Minuty</th>
+                    <th>Punkty</th>
+                    <th>Asysty</th>
+                    <th>Zbiórki</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($zawodnicy as $zawodnik): if ($zawodnik['id_zespolu'] == $mecz['id_gospodarza']): ?>
+                <tr>
+                    <td><?= htmlspecialchars($zawodnik['imie'] . ' ' . $zawodnik['nazwisko']) ?></td>
+                    <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][minuty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['minuty'] ?? '') ?>" min="0"></td>
+                    <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][punkty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['punkty'] ?? '') ?>" min="0"></td>
+                    <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][asysty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['asysty'] ?? '') ?>" min="0"></td>
+                    <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][zbiorki]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['zbiorki'] ?? '') ?>" min="0"></td>
+                </tr>
+                <?php endif; endforeach; ?>
+            </tbody>
+        </table>
 
-            <h3>Goście: <?= htmlspecialchars($mecz['nazwa_goscia']) ?></h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Zawodnik</th>
-                        <th>Minuty</th>
-                        <th>Punkty</th>
-                        <th>Asysty</th>
-                        <th>Zbiórki</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($zawodnicy as $zawodnik): if ($zawodnik['id_zespolu'] == $mecz['id_goscia']): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($zawodnik['imie'] . ' ' . $zawodnik['nazwisko']) ?></td>
-                        <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][minuty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['minuty'] ?? '') ?>"></td>
-                        <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][punkty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['punkty'] ?? '') ?>"></td>
-                        <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][asysty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['asysty'] ?? '') ?>"></td>
-                        <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][zbiorki]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['zbiorki'] ?? '') ?>"></td>
-                    </tr>
-                    <?php endif; endforeach; ?>
-                </tbody>
-            </table>
-            <br>
-            <div>
-                <button type="submit">Zapisz statystyki</button>
-            </div>
-        </form>
-    </main>
-    <footer>
-        <p>Projekt bazy danych - 2024</p>
-    </footer>
-</body>
-</html>
+        <h3>Goście: <?= htmlspecialchars($mecz['nazwa_goscia']) ?></h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Zawodnik</th>
+                    <th>Minuty</th>
+                    <th>Punkty</th>
+                    <th>Asysty</th>
+                    <th>Zbiórki</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($zawodnicy as $zawodnik): if ($zawodnik['id_zespolu'] == $mecz['id_goscia']): ?>
+                <tr>
+                    <td><?= htmlspecialchars($zawodnik['imie'] . ' ' . $zawodnik['nazwisko']) ?></td>
+                    <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][minuty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['minuty'] ?? '') ?>" min="0"></td>
+                    <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][punkty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['punkty'] ?? '') ?>" min="0"></td>
+                    <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][asysty]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['asysty'] ?? '') ?>" min="0"></td>
+                    <td><input type="number" name="stats[<?= $zawodnik['id_zawodnika'] ?>][zbiorki]" value="<?= htmlspecialchars($istniejace_statystyki[$zawodnik['id_zawodnika']]['zbiorki'] ?? '') ?>" min="0"></td>
+                </tr>
+                <?php endif; endforeach; ?>
+            </tbody>
+        </table>
+        <br>
+        <div>
+            <button type="submit">Zapisz statystyki</button>
+        </div>
+    </form>
+<?php require_once $basePath . 'layout/footer.php'; ?>

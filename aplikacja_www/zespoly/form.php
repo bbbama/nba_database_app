@@ -82,78 +82,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$pageTitle = ($is_edit ? 'Edytuj' : 'Dodaj') . ' Zespół';
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Zespół</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <header>
-        <h1><?= $is_edit ? 'Edytuj' : 'Dodaj' ?> Zespół</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="../index.php">Strona główna</a></li>
-            <li><a href="../zawodnicy/">Zawodnicy</a></li>
-            <li><a href="index.php">Zespoły</a></li>
-            <li><a href="../mecze/">Mecze</a></li>
-            <li><a href="../raporty.php">Raporty</a></li>
-            <li><a href="../areny/">Areny</a></li>
-            <li><a href="../sezony/">Sezony</a></li>
-        </ul>
-    </nav>
-    <main>
-        <?php if (!empty($errors)): ?>
-            <div class="errors">
-                <p>Wystąpiły błędy:</p>
-                <ul>
-                    <?php foreach ($errors as $error): ?>
-                        <li><?= htmlspecialchars($error) ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
+<main>
+    <?php if (!empty($errors)): ?>
+        <div class="errors">
+            <p>Wystąpiły błędy:</p>
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-        <form method="POST">
-            <div>
-                <label for="nazwa">Nazwa:</label>
-                <input type="text" id="nazwa" name="nazwa" value="<?= htmlspecialchars($zespol['nazwa']) ?>" required>
-            </div>
-            <div>
-                <label for="miasto">Miasto:</label>
-                <input type="text" id="miasto" name="miasto" value="<?= htmlspecialchars($zespol['miasto']) ?>">
-            </div>
-            <div>
-                <label for="rok_zalozenia">Rok założenia:</label>
-                <input type="number" id="rok_zalozenia" name="rok_zalozenia" value="<?= htmlspecialchars($zespol['rok_zalozenia']) ?>">
-            </div>
-            <div>
-                <label for="trener_glowny">Główny trener:</label>
-                <input type="text" id="trener_glowny" name="trener_glowny" value="<?= htmlspecialchars($zespol['trener_glowny']) ?>">
-            </div>
-            <div>
-                <label for="id_arena">Arena:</label>
-                <select id="id_arena" name="id_arena">
-                    <option value="">-- Brak areny --</option>
-                    <?php foreach ($areny as $arena): ?>
-                        <option value="<?= $arena['id_arena'] ?>" <?= ($zespol['id_arena'] == $arena['id_arena']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($arena['nazwa']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div>
-                <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj zespół' ?></button>
-                <a href="index.php" class="button">Anuluj</a>
-            </div>
-        </form>
-    </main>
-    <footer>
-        <p>Projekt bazy danych - 2024</p>
-    </footer>
-</body>
-</html>
+    <form method="POST">
+        <div>
+            <label for="nazwa">Nazwa:</label>
+            <input type="text" id="nazwa" name="nazwa" value="<?= htmlspecialchars($zespol['nazwa']) ?>" required>
+        </div>
+        <div>
+            <label for="miasto">Miasto:</label>
+            <input type="text" id="miasto" name="miasto" value="<?= htmlspecialchars($zespol['miasto']) ?>">
+        </div>
+        <div>
+            <label for="rok_zalozenia">Rok założenia:</label>
+            <input type="number" id="rok_zalozenia" name="rok_zalozenia" value="<?= htmlspecialchars($zespol['rok_zalozenia']) ?>">
+        </div>
+        <div>
+            <label for="trener_glowny">Główny trener:</label>
+            <input type="text" id="trener_glowny" name="trener_glowny" value="<?= htmlspecialchars($zespol['trener_glowny']) ?>">
+        </div>
+        <div>
+            <label for="id_arena">Arena:</label>
+            <select id="id_arena" name="id_arena">
+                <option value="">-- Brak areny --</option>
+                <?php foreach ($areny as $arena): ?>
+                    <option value="<?= $arena['id_arena'] ?>" <?= ($zespol['id_arena'] == $arena['id_arena']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($arena['nazwa']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <button type="submit"><?= $is_edit ? 'Zapisz zmiany' : 'Dodaj zespół' ?></button>
+            <a href="index.php" class="button">Anuluj</a>
+        </div>
+    </form>
+<?php require_once $basePath . 'layout/footer.php'; ?>

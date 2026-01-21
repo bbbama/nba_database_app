@@ -22,46 +22,24 @@ try {
 } catch (PDOException $e) {
     echo "Błąd odczytu danych: " . $e->getMessage();
 }
+
+$pageTitle = 'Zawodnik z największą liczbą punktów w jednym meczu';
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Zawodnik z największą liczbą punktów w jednym meczu</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <header>
-        <h1>Raport: Zawodnik z największą liczbą punktów w jednym meczu</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="../index.php">Strona główna</a></li>
-            <li><a href="../zawodnicy/">Zawodnicy</a></li>
-            <li><a href="../zespoly/">Zespoły</a></li>
-            <li><a href="../mecze/">Mecze</a></li>
-            <li><a href="index.php">Raporty</a></li>
-            <li><a href="../areny/">Areny</a></li>
-            <li><a href="../sezony/">Sezony</a></li>
-        </ul>
-    </nav>
-    <main>
-        <h2>Zawodnik z największą liczbą punktów w pojedynczym meczu</h2>
+<main>
+    <h2>Zawodnik z największą liczbą punktów w pojedynczym meczu</h2>
 
-        <?php if ($player_record): ?>
-            <p><strong>Zawodnik:</strong> <?= htmlspecialchars($player_record['imie'] . ' ' . $player_record['nazwisko']) ?></p>
-            <p><strong>Zespół:</strong> <?= htmlspecialchars($player_record['zespol_zawodnika']) ?></p>
-            <p><strong>Data meczu:</strong> <?= htmlspecialchars($player_record['data_meczu']) ?></p>
-            <p><strong>Punkty:</strong> <?= htmlspecialchars($player_record['punkty']) ?></p>
-        <?php else: ?>
-            <p>Brak danych o zawodniku z największą liczbą punktów w pojedynczym meczu.</p>
-        <?php endif; ?>
+    <?php if ($player_record): ?>
+        <p><strong>Zawodnik:</strong> <?= htmlspecialchars($player_record['imie'] . ' ' . $player_record['nazwisko']) ?></p>
+        <p><strong>Zespół:</strong> <?= htmlspecialchars($player_record['zespol_zawodnika']) ?></p>
+        <p><strong>Data meczu:</strong> <?= htmlspecialchars($player_record['data_meczu']) ?></p>
+        <p><strong>Punkty:</strong> <?= htmlspecialchars($player_record['punkty']) ?></p>
+    <?php else: ?>
+        <p>Brak danych o zawodniku z największą liczbą punktów w pojedynczym meczu.</p>
+    <?php endif; ?>
 
-        <a href="index.php">Powrót do listy raportów</a>
-    </main>
-    <footer>
-        <p>Projekt bazy danych - 2024</p>
-    </footer>
-</body>
-</html>
+    <a href="index.php">Powrót do listy raportów</a>
+<?php require_once $basePath . 'layout/footer.php'; ?>

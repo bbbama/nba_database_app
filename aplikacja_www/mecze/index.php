@@ -9,75 +9,48 @@ try {
 } catch (PDOException $e) {
     die("Błąd przy pobieraniu danych: " . $e->getMessage());
 }
+
+$pageTitle = 'Zarządzanie Meczami';
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Zarządzanie Meczami</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <header>
-        <h1>Zarządzanie Meczami</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="../index.php">Strona główna</a></li>
-            <li><a href="../zawodnicy/">Zawodnicy</a></li>
-            <li><a href="../zespoly/">Zespoły</a></li>
-            <li><a href="index.php">Mecze</a></li>
-            <li><a href="../raporty/">Raporty</a></li>
-            <li><a href="../areny/">Areny</a></li>
-            <li><a href="../sezony/">Sezony</a></li>
-            <li><a href="../trener/">Trenerzy</a></li>
-            <li><a href="../kontrakt/">Kontrakty</a></li>
-            <li><a href="../kontuzja/">Kontuzje</a></li>
-            <li><a href="../nagroda/">Nagrody</a></li>
-            <li><a href="../tabela_ligowa/">Tabela Ligowa</a></li>
-        </ul>
-    </nav>
-    <main>
-        <h2>Lista Meczów</h2>
-        <a href="form.php" class="button">Dodaj nowy mecz</a>
-        <table>
-            <thead>
+<main>
+    <h2>Lista Meczów</h2>
+    <a href="form.php" class="button">Dodaj nowy mecz</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Sezon</th>
+                <th>Gospodarz</th>
+                <th>Wynik</th>
+                <th>Gość</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (count($mecze) > 0): ?>
+                <?php foreach ($mecze as $mecz): ?>
                 <tr>
-                    <th>Data</th>
-                    <th>Sezon</th>
-                    <th>Gospodarz</th>
-                    <th>Wynik</th>
-                    <th>Gość</th>
-                    <th>Akcje</th>
+                    <td><?= htmlspecialchars($mecz['data_meczu']) ?></td>
+                    <td><?= htmlspecialchars($mecz['sezon']) ?></td>
+                    <td><?= htmlspecialchars($mecz['gospodarz']) ?></td>
+                    <td><?= htmlspecialchars($mecz['wynik_gospodarza']) ?> : <?= htmlspecialchars($mecz['wynik_goscia']) ?></td>
+                    <td><?= htmlspecialchars($mecz['gosc']) ?></td>
+                    <td>
+                        <a href="../statystyki/index.php?id_meczu=<?= $mecz['id_meczu'] ?>" class="button">Statystyki</a>
+                        <a href="form.php?id=<?= $mecz['id_meczu'] ?>" class="button edit">Edytuj</a>
+                        <a href="delete.php?id=<?= $mecz['id_meczu'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć ten mecz? Usunięcie meczu usunie również wszystkie powiązane z nim statystyki.')">Usuń</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php if (count($mecze) > 0): ?>
-                    <?php foreach ($mecze as $mecz): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($mecz['data_meczu']) ?></td>
-                        <td><?= htmlspecialchars($mecz['sezon']) ?></td>
-                        <td><?= htmlspecialchars($mecz['gospodarz']) ?></td>
-                        <td><?= htmlspecialchars($mecz['wynik_gospodarza']) ?> : <?= htmlspecialchars($mecz['wynik_goscia']) ?></td>
-                        <td><?= htmlspecialchars($mecz['gosc']) ?></td>
-                        <td>
-                            <a href="../statystyki/index.php?id_meczu=<?= $mecz['id_meczu'] ?>" class="button">Statystyki</a>
-                            <a href="form.php?id=<?= $mecz['id_meczu'] ?>" class="button edit">Edytuj</a>
-                            <a href="delete.php?id=<?= $mecz['id_meczu'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć ten mecz? Usunięcie meczu usunie również wszystkie powiązane z nim statystyki.')">Usuń</a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="6">Brak danych o meczach w bazie.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </main>
-    <footer>
-        <p>Projekt bazy danych - 2024</p>
-    </footer>
-</body>
-</html>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6">Brak danych o meczach w bazie.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+<?php require_once $basePath . 'layout/footer.php'; ?>
