@@ -1,6 +1,6 @@
 </main>
 <footer>
-    <p>Projekt bazy danych - 2024</p>
+    <p>Projekt bazy danych - 2026</p>
 </footer>
 </body>
 </html>

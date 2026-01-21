@@ -30,6 +30,11 @@ if (isset($_GET['id'])) {
 
 // Obsługa formularza (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Weryfikacja tokenu CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die('Błąd CSRF: Nieprawidłowy token.');
+    }
+
     $sezon['rok_rozpoczecia'] = $_POST['rok_rozpoczecia'] ?? '';
     $sezon['rok_zakonczenia'] = $_POST['rok_zakonczenia'] ?? '';
 
@@ -93,6 +98,7 @@ require_once $basePath . 'layout/nav.php';
     <?php endif; ?>
 
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
         <div>
             <label for="rok_rozpoczecia">Rok rozpoczęcia:</label>
             <input type="number" id="rok_rozpoczecia" name="rok_rozpoczecia" value="<?= htmlspecialchars($sezon['rok_rozpoczecia']) ?>" required min="1900" max="<?= date('Y') + 1 ?>">

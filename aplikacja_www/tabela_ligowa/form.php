@@ -107,6 +107,7 @@ require_once $basePath . 'layout/nav.php';
     <?php endif; ?>
 
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
         <div>
             <label for="id_sezonu">Sezon:</label>
             <select id="id_sezonu" name="id_sezonu" required>

@@ -43,6 +43,11 @@ if (isset($_GET['id'])) {
 
 // Obsługa formularza (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Weryfikacja tokenu CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die('Błąd CSRF: Nieprawidłowy token.');
+    }
+    
     $zespol['nazwa'] = $_POST['nazwa'] ?? '';
     $zespol['miasto'] = $_POST['miasto'] ?? '';
     $zespol['rok_zalozenia'] = $_POST['rok_zalozenia'] ?? '';
@@ -102,6 +107,7 @@ require_once $basePath . 'layout/nav.php';
     <?php endif; ?>
 
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
         <div>
             <label for="nazwa">Nazwa:</label>
             <input type="text" id="nazwa" name="nazwa" value="<?= htmlspecialchars($zespol['nazwa']) ?>" required>

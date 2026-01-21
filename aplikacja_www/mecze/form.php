@@ -45,6 +45,11 @@ if (isset($_GET['id'])) {
 
 // Obsługa formularza (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Weryfikacja tokenu CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die('Błąd CSRF: Nieprawidłowy token.');
+    }
+
     $mecz['data_meczu'] = $_POST['data_meczu'] ?? '';
     $mecz['id_gospodarza'] = $_POST['id_gospodarza'] ?? '';
     $mecz['id_goscia'] = $_POST['id_goscia'] ?? '';
@@ -114,6 +119,7 @@ require_once $basePath . 'layout/nav.php';
     <?php endif; ?>
 
     <form method="POST">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
         <div>
             <label for="data_meczu">Data meczu:</label>
             <input type="date" id="data_meczu" name="data_meczu" value="<?= htmlspecialchars($mecz['data_meczu']) ?>" required>
