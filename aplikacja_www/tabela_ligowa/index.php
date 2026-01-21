@@ -4,7 +4,7 @@ require_once '../db.php';
 $tabela_ligowa_entries = [];
 try {
     $pdo = getDbConnection();
-    $stmt = $pdo->query("SELECT tl.id_tabeli, s.rok_rozpoczecia, s.rok_zakonczenia, z.nazwa AS nazwa_zespolu, tl.liczba_zwyciestw, tl.liczba_porazek, tl.miejsce_w_tabeli FROM tabela_ligowa tl JOIN sezon s ON tl.id_sezonu = s.id_sezonu JOIN zespol z ON tl.id_zespolu = z.id_zespolu ORDER BY s.rok_rozpoczecia DESC, tl.miejsce_w_tabeli ASC");
+    $stmt = $pdo->query("SELECT tl.id_tabeli, s.rok_rozpoczecia, s.rok_zakonczenia, z.nazwa AS nazwa_zespolu, tl.liczba_zwyciestw, tl.liczba_porazek, vtl.miejsce_w_tabeli FROM tabela_ligowa tl JOIN sezon s ON tl.id_sezonu = s.id_sezonu JOIN zespol z ON tl.id_zespolu = z.id_zespolu JOIN widok_tabeli_ligowej vtl ON tl.id_sezonu = vtl.id_sezonu AND tl.id_zespolu = vtl.id_zespolu ORDER BY s.rok_rozpoczecia DESC, vtl.miejsce_w_tabeli ASC");
     $tabela_ligowa_entries = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Błąd odczytu wpisów tabeli ligowej: " . $e->getMessage());
