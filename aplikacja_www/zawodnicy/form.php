@@ -1,5 +1,6 @@
 <?php
 require_once '../db.php';
+session_start();
 
 $zawodnik = [
     'id_zawodnika' => '',
@@ -39,12 +40,14 @@ if (isset($_GET['id'])) {
 }
 
 // Obsługa formularza (POST)
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
     // Weryfikacja tokenu CSRF
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         die('Błąd CSRF: Nieprawidłowy token.');
     }
-    
+
     $zawodnik['imie'] = $_POST['imie'] ?? '';
     $zawodnik['nazwisko'] = $_POST['nazwisko'] ?? '';
     $zawodnik['pozycja'] = $_POST['pozycja'] ?? '';

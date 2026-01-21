@@ -1,5 +1,6 @@
 <?php
 require_once '../db.php';
+session_start();
 
 $pdo = getDbConnection();
 
@@ -47,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         die('Błąd CSRF: Nieprawidłowy token.');
     }
-    
+
     $zespol['nazwa'] = $_POST['nazwa'] ?? '';
     $zespol['miasto'] = $_POST['miasto'] ?? '';
     $zespol['rok_zalozenia'] = $_POST['rok_zalozenia'] ?? '';
