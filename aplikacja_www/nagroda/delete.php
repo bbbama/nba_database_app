@@ -1,22 +1,70 @@
 <?php
 require_once '../db.php';
+session_start();
 
-if (isset($_GET['id'])) {
-    $id_nagrody = $_GET['id'];
-    $pdo = getDbConnection();
+$pdo = getDbConnection();
+
+// Obsługa żądania POST (potwierdzenie usunięcia)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Weryfikacja tokenu CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die('Błąd CSRF: Nieprawidłowy token.');
+    }
+
+    if (!isset($_POST['id'])) {
+        header('Location: index.php');
+        exit;
+    }
+
+    $id_nagrody = $_POST['id'];
 
     try {
-        $stmt = $pdo->prepare("DELETE FROM nagroda WHERE id_nagrody = :id_nagrody");
-        $stmt->bindParam(':id_nagrody', $id_nagrody, PDO::PARAM_INT);
-        $stmt->execute();
-
+        $stmt = $pdo->prepare('DELETE FROM nagroda WHERE id_nagrody = ?');
+        $stmt->execute([$id_nagrody]);
         header('Location: index.php');
         exit;
     } catch (PDOException $e) {
-        die("Błąd przy usuwaniu nagrody: " . $e->getMessage());
+        die("Błąd podczas usuwania nagrody: " . $e->getMessage());
     }
-} else {
+}
+
+// Obsługa żądania GET (wyświetlenie formularza potwierdzenia)
+if (!isset($_GET['id'])) {
     header('Location: index.php');
     exit;
 }
+$id_nagrody = $_GET['id'];
+
+try {
+    $stmt = $pdo->prepare("SELECT nazwa_nagrody FROM nagroda WHERE id_nagrody = ?");
+    $stmt->execute([$id_nagrody]);
+    $item = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$item) {
+        header('Location: index.php');
+        exit;
+    }
+    $itemName = htmlspecialchars($item['nazwa_nagrody']);
+} catch (PDOException $e) {
+    die("Błąd przy pobieraniu danych: " . $e->getMessage());
+}
+
+$pageTitle = 'Potwierdź usunięcie';
+$basePath = '../';
+require_once $basePath . 'layout/header.php';
+require_once $basePath . 'layout/nav.php';
 ?>
+
+<main>
+    <h2>Potwierdź usunięcie</h2>
+    <p>Czy na pewno chcesz usunąć nagrodę: <strong><?= $itemName ?></strong>?</p>
+    
+    <form action="delete.php" method="POST" style="display: inline-block;">
+        <input type="hidden" name="id" value="<?= htmlspecialchars($id_nagrody) ?>">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+        <button type="submit" class="button-delete">Tak, usuń</button>
+    </form>
+    <a href="index.php" class="button">Anuluj</a>
+</main>
+
+<?php require_once $basePath . 'layout/footer.php'; ?>

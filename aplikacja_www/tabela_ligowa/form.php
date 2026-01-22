@@ -44,6 +44,11 @@ if (isset($_GET['id'])) {
 
 // Obsługa formularza (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Weryfikacja tokenu CSRF
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die('Błąd CSRF: Nieprawidłowy token.');
+    }
+
     $entry['id_sezonu'] = $_POST['id_sezonu'] ?? '';
     $entry['id_zespolu'] = $_POST['id_zespolu'] ?? '';
     $entry['liczba_zwyciestw'] = $_POST['liczba_zwyciestw'] ?? 0;
