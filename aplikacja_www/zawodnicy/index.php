@@ -39,7 +39,8 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($zawodnik['nazwa_zespolu']) ?></td>
                     <td>
                         <a href="form.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button edit">Edytuj</a>
-                        <a href="delete.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć tego zawodnika?')">Usuń</a>
+                        <a href="statystyki.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button">Statystyki</a>
+                        <a href="delete.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button delete">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

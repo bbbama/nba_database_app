@@ -41,7 +41,6 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($kontuzja['status']) ?></td>
                     <td>
                         <a href="form.php?id=<?= htmlspecialchars($kontuzja['id_kontuzji']) ?>">Edytuj</a>
-                        <a href="delete.php?id=<?= htmlspecialchars($kontuzja['id_kontuzji']) ?>" onclick="return confirm('Czy na pewno chcesz usunąć tę kontuzję?');">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -41,7 +41,6 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($entry['miejsce_w_tabeli']) ?></td>
                     <td>
                         <a href="form.php?id=<?= htmlspecialchars($entry['id_tabeli']) ?>">Edytuj</a>
-                        <a href="delete.php?id=<?= htmlspecialchars($entry['id_tabeli']) ?>" onclick="return confirm('Czy na pewno chcesz usunąć ten wpis z tabeli ligowej?');">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

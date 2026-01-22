@@ -37,7 +37,6 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($sezon['rok_zakonczenia']) ?></td>
                     <td>
                         <a href="form.php?id=<?= $sezon['id_sezonu'] ?>" class="button edit">Edytuj</a>
-                        <a href="delete.php?id=<?= $sezon['id_sezonu'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć ten sezon? Usunięcie sezonu może wpłynąć na powiązane mecze i tabele ligowe.')">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -41,7 +41,6 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars(number_format($kontrakt['wynagrodzenie_roczne'], 2, ',', ' ')) ?></td>
                     <td>
                         <a href="form.php?id=<?= htmlspecialchars($kontrakt['id_kontraktu']) ?>">Edytuj</a>
-                        <a href="delete.php?id=<?= htmlspecialchars($kontrakt['id_kontraktu']) ?>" onclick="return confirm('Czy na pewno chcesz usunąć ten kontrakt?');">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

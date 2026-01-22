@@ -46,7 +46,6 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($zespol['nazwa_areny'] ?? 'Brak danych') ?></td>
                     <td>
                         <a href="form.php?id=<?= $zespol['id_zespolu'] ?>" class="button edit">Edytuj</a>
-                        <a href="delete.php?id=<?= $zespol['id_zespolu'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć ten zespół? Usunięcie zespołu może wpłynąć na inne dane (np. zawodników w tym zespole).')">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

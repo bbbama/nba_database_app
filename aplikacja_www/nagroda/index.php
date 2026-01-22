@@ -37,7 +37,6 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($nagroda['rok']) ?></td>
                     <td>
                         <a href="form.php?id=<?= htmlspecialchars($nagroda['id_nagrody']) ?>">Edytuj</a>
-                        <a href="delete.php?id=<?= htmlspecialchars($nagroda['id_nagrody']) ?>" onclick="return confirm('Czy na pewno chcesz usunąć tę nagrodę?');">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

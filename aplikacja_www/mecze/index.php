@@ -42,7 +42,6 @@ require_once $basePath . 'layout/nav.php';
                     <td>
                         <a href="../statystyki/index.php?id_meczu=<?= $mecz['id_meczu'] ?>" class="button">Statystyki</a>
                         <a href="form.php?id=<?= $mecz['id_meczu'] ?>" class="button edit">Edytuj</a>
-                        <a href="delete.php?id=<?= $mecz['id_meczu'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć ten mecz? Usunięcie meczu usunie również wszystkie powiązane z nim statystyki.')">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

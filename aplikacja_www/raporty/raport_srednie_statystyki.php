@@ -3,7 +3,9 @@ require_once '../db.php';
 
 $pdo = getDbConnection();
 
-$sql = "SELECT * FROM widok_srednie_statystyki_zawodnika ORDER BY srednie_punkty DESC";
+// Widok jest teraz bardziej rozbudowany i zawiera wszystkie potrzebne kolumny.
+// Dodajemy warunek, aby pokazywać tylko graczy, którzy mają zarejestrowane statystyki.
+$sql = "SELECT * FROM widok_srednie_statystyki_zawodnika WHERE liczba_meczow > 0 ORDER BY srednie_punkty DESC";
 $stmt = $pdo->query($sql);
 $statystyki = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -15,6 +17,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Średnie statystyki zawodników</h2>
+    <?php if (empty($statystyki)): ?>
+        <p>Brak statystyk do wyświetlenia. Upewnij się, że zawodnicy mają przypisane statystyki w przynajmniej jednym meczu.</p>
+    <?php else: ?>
     <table>
         <thead>
             <tr>
@@ -24,20 +29,24 @@ require_once $basePath . 'layout/nav.php';
                 <th>Średnie punkty</th>
                 <th>Średnie asysty</th>
                 <th>Średnie zbiórki</th>
+                <th>Średnio minut</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($statystyki as $stat): ?>
             <tr>
-                <td><?= htmlspecialchars($stat['zawodnik_nazwa']) ?></td>
+                <td><a href="<?= $basePath ?>zawodnicy/statystyki.php?id=<?= $stat['id_zawodnika'] ?>"><?= htmlspecialchars($stat['zawodnik_nazwa']) ?></a></td>
                 <td><?= htmlspecialchars($stat['nazwa_zespolu']) ?></td>
                 <td><?= htmlspecialchars($stat['liczba_meczow']) ?></td>
                 <td><?= htmlspecialchars($stat['srednie_punkty']) ?></td>
                 <td><?= htmlspecialchars($stat['srednie_asysty']) ?></td>
                 <td><?= htmlspecialchars($stat['srednie_zbiorki']) ?></td>
+                <td><?= htmlspecialchars($stat['srednie_minuty']) ?></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-    <a href="index.php">Powrót do listy raportów</a>
+    <?php endif; ?>
+    <a href="index.php" class="button">Powrót do listy raportów</a>
+</main>
 <?php require_once $basePath . 'layout/footer.php'; ?>

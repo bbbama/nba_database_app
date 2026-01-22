@@ -38,7 +38,6 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($arena['rok_otwarcia']) ?></td>
                     <td>
                         <a href="form.php?id=<?= $arena['id_arena'] ?>" class="button edit">Edytuj</a>
-                        <a href="delete.php?id=<?= $arena['id_arena'] ?>" class="button delete" onclick="return confirm('Czy na pewno chcesz usunąć tę arenę? Zespoły powiązane z tą areną będą miały ustawione pole areny na NULL.')">Usuń</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
