@@ -1,6 +1,7 @@
 <?php
-require_once '../db.php';
-session_start();
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_once $basePath . 'db.php';
 
 // Sprawdzenie, czy podano ID zawodnika
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {

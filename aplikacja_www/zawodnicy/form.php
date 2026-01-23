@@ -1,6 +1,9 @@
 <?php
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_admin(); // Wymagamy uprawnień administratora do edycji i dodawania
+
 require_once '../db.php';
-session_start();
 
 $zawodnik = [
     'id_zawodnika' => '',

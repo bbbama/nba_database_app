@@ -1,5 +1,9 @@
 <?php
-require_once '../db.php';
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_once $basePath . 'db.php';
+
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
 
 $kontrakty = [];
 try {
@@ -18,7 +22,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Kontraktów</h2>
+    <?php if ($isAdmin): ?>
     <p><a href="form.php">Dodaj nowy kontrakt</a></p>
+    <?php endif; ?>
     <?php if (!empty($kontrakty)): ?>
         <table>
             <thead>
@@ -28,7 +34,9 @@ require_once $basePath . 'layout/nav.php';
                     <th>Data początek</th>
                     <th>Data koniec</th>
                     <th>Wynagrodzenie roczne</th>
+                    <?php if ($isAdmin): ?>
                     <th>Akcje</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -39,9 +47,12 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($kontrakt['data_poczatek']) ?></td>
                     <td><?= htmlspecialchars($kontrakt['data_koniec']) ?></td>
                     <td><?= htmlspecialchars(number_format($kontrakt['wynagrodzenie_roczne'], 2, ',', ' ')) ?></td>
+                    <?php if ($isAdmin): ?>
                     <td>
                         <a href="form.php?id=<?= htmlspecialchars($kontrakt['id_kontraktu']) ?>">Edytuj</a>
+                        <a href="delete.php?id=<?= htmlspecialchars($kontrakt['id_kontraktu']) ?>" class="button-delete">Usuń</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

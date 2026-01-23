@@ -66,3 +66,13 @@ Biorąc pod uwagę wszystkie powyższe punkty, sugeruję następującą kolejno�
 To długa lista, ale nie zrażaj się. Każdy z tych kroków znacząco podniesie jakość i profesjonalizm Twojego projektu.
 
 Od którego punktu chciałbyś zacząć?
+
+<?php                                                                                                                            │
+│ 2 + $basePath = '../';                                                                                                               │
+│ 3 + require_once $basePath . 'auth_check.php';                                                                                       │
+│ 4 + require_admin();                                                                                                                 │
+│ 5 +                                                                                                                                  │
+│ 6   require_once '../db.php';                                                                                                        │
+│ 3 - session_start();                                                                                                                 │
+│ 7                                                                                                                                    │
+│ 8   $pdo = getDbConnection(); 

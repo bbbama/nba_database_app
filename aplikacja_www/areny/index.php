@@ -1,5 +1,9 @@
 <?php
-require_once '../db.php';
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_once $basePath . 'db.php';
+
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
 
 try {
     $pdo = getDbConnection();
@@ -17,7 +21,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Aren</h2>
+    <?php if ($isAdmin): ?>
     <a href="form.php" class="button">Dodaj nową arenę</a>
+    <?php endif; ?>
     <table>
         <thead>
             <tr>
@@ -25,7 +31,9 @@ require_once $basePath . 'layout/nav.php';
                 <th>Miasto</th>
                 <th>Pojemność</th>
                 <th>Rok otwarcia</th>
+                <?php if ($isAdmin): ?>
                 <th>Akcje</th>
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -36,14 +44,17 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($arena['miasto']) ?></td>
                     <td><?= htmlspecialchars($arena['pojemnosc']) ?></td>
                     <td><?= htmlspecialchars($arena['rok_otwarcia']) ?></td>
+                    <?php if ($isAdmin): ?>
                     <td>
                         <a href="form.php?id=<?= $arena['id_arena'] ?>" class="button edit">Edytuj</a>
+                        <a href="delete.php?id=<?= $arena['id_arena'] ?>" class="button-delete">Usuń</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="5">Brak danych o arenach w bazie.</td>
+                    <td colspan="<?= $isAdmin ? '5' : '4' ?>">Brak danych o arenach w bazie.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

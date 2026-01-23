@@ -1,5 +1,9 @@
 <?php
-require_once '../db.php';
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_once $basePath . 'db.php';
+
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
 
 $nagrody = [];
 try {
@@ -18,7 +22,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Nagród</h2>
+    <?php if ($isAdmin): ?>
     <p><a href="form.php">Dodaj nową nagrodę</a></p>
+    <?php endif; ?>
     <?php if (!empty($nagrody)): ?>
         <table>
             <thead>
@@ -26,7 +32,9 @@ require_once $basePath . 'layout/nav.php';
                     <th>Zawodnik</th>
                     <th>Nazwa nagrody</th>
                     <th>Rok</th>
+                    <?php if ($isAdmin): ?>
                     <th>Akcje</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -35,9 +43,12 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($nagroda['imie'] . ' ' . $nagroda['nazwisko']) ?></td>
                     <td><?= htmlspecialchars($nagroda['nazwa_nagrody']) ?></td>
                     <td><?= htmlspecialchars($nagroda['rok']) ?></td>
+                    <?php if ($isAdmin): ?>
                     <td>
                         <a href="form.php?id=<?= htmlspecialchars($nagroda['id_nagrody']) ?>">Edytuj</a>
+                        <a href="delete.php?id=<?= htmlspecialchars($nagroda['id_nagrody']) ?>" class="button-delete">Usuń</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

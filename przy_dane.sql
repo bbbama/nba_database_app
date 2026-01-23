@@ -19,3 +19,8 @@ VALUES
  (1, 1, 36, 28, 8, 7),
  (1, 2, 34, 22, 3, 12),
  (1, 3, 38, 30, 5, 6);
+
+-- Domyślny użytkownik-administrator
+-- Login: admin
+-- Hasło: admin
+INSERT INTO uzytkownicy (login, hash_hasla, rola) VALUES ('admin', '$2y$10$N.yB5dJgLgq0Q9C2./sV..gJ5.LpDXMhIs78b0i9p3A2fH6y0K9jK', 'admin');

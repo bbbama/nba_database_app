@@ -121,3 +121,12 @@ CREATE TABLE nagroda (
   nazwa_nagrody   VARCHAR(100) NOT NULL,
   rok             SMALLINT CHECK (rok > 1900 AND rok <= EXTRACT(YEAR FROM CURRENT_DATE))
 );
+
+-- 8. Użytkownicy i system logowania
+CREATE TABLE uzytkownicy (
+    id_uzytkownika  SERIAL PRIMARY KEY,
+    login           VARCHAR(50) NOT NULL UNIQUE,
+    hash_hasla      VARCHAR(255) NOT NULL,
+    rola            VARCHAR(20) NOT NULL CHECK (rola IN ('admin', 'user'))
+);
+

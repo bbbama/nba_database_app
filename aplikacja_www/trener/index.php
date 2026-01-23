@@ -1,5 +1,7 @@
 <?php
-require_once '../db.php';
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_once $basePath . 'db.php';
 
 $trenerzy = [];
 try {

@@ -1,5 +1,9 @@
 <?php
-require_once '../db.php';
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_once $basePath . 'db.php';
+
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
 
 try {
     $pdo = getDbConnection();
@@ -18,7 +22,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Zawodników</h2>
+    <?php if ($isAdmin): ?>
     <a href="form.php" class="button">Dodaj nowego zawodnika</a>
+    <?php endif; ?>
     <table>
         <thead>
             <tr>
@@ -38,9 +44,11 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($zawodnik['pozycja']) ?></td>
                     <td><?= htmlspecialchars($zawodnik['nazwa_zespolu']) ?></td>
                     <td>
-                        <a href="form.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button edit">Edytuj</a>
                         <a href="statystyki.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button">Statystyki</a>
+                        <?php if ($isAdmin): ?>
+                        <a href="form.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button edit">Edytuj</a>
                         <a href="delete.php?id=<?= $zawodnik['id_zawodnika'] ?>" class="button delete">Usuń</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -1,5 +1,9 @@
 <?php
-require_once '../db.php';
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_once $basePath . 'db.php';
+
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
 
 $kontuzje = [];
 try {
@@ -18,7 +22,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Kontuzji</h2>
+    <?php if ($isAdmin): ?>
     <p><a href="form.php">Dodaj nową kontuzję</a></p>
+    <?php endif; ?>
     <?php if (!empty($kontuzje)): ?>
         <table>
             <thead>
@@ -28,7 +34,9 @@ require_once $basePath . 'layout/nav.php';
                     <th>Data rozpoczęcia</th>
                     <th>Data zakończenia</th>
                     <th>Status</th>
+                    <?php if ($isAdmin): ?>
                     <th>Akcje</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -39,9 +47,12 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($kontuzja['data_rozpoczecia']) ?></td>
                     <td><?= htmlspecialchars($kontuzja['data_zakonczenia']) ?></td>
                     <td><?= htmlspecialchars($kontuzja['status']) ?></td>
+                    <?php if ($isAdmin): ?>
                     <td>
                         <a href="form.php?id=<?= htmlspecialchars($kontuzja['id_kontuzji']) ?>">Edytuj</a>
+                        <a href="delete.php?id=<?= htmlspecialchars($kontuzja['id_kontuzji']) ?>" class="button-delete">Usuń</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

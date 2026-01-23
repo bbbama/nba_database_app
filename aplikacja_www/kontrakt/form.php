@@ -1,6 +1,9 @@
 <?php
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_admin();
+
 require_once '../db.php';
-session_start();
 
 $pdo = getDbConnection();
 

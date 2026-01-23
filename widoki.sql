@@ -31,8 +31,10 @@ DROP VIEW IF EXISTS widok_wyniki_meczy;
 -- Widok 3: Wyniki meczów
 CREATE OR REPLACE VIEW widok_wyniki_meczy AS
 SELECT m.id_meczu, m.data_meczu,
+  s.rok_rozpoczecia || '/' || s.rok_zakonczenia AS sezon,
   g.nazwa AS gospodarz, m.wynik_gospodarza,
   z.nazwa AS gosc, m.wynik_goscia
 FROM mecz m
 JOIN zespol g ON m.id_gospodarza = g.id_zespolu
-JOIN zespol z ON m.id_goscia = z.id_zespolu;
+JOIN zespol z ON m.id_goscia = z.id_zespolu
+LEFT JOIN sezon s ON m.id_sezonu = s.id_sezonu;

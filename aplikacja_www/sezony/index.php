@@ -1,5 +1,9 @@
 <?php
-require_once '../db.php';
+$basePath = '../';
+require_once $basePath . 'auth_check.php';
+require_once $basePath . 'db.php';
+
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
 
 $pdo = getDbConnection();
 
@@ -18,14 +22,18 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Sezonów</h2>
+    <?php if ($isAdmin): ?>
     <a href="form.php" class="button">Dodaj nowy sezon</a>
+    <?php endif; ?>
     <table>
         <thead>
             <tr>
                 <th>ID Sezonu</th>
                 <th>Rok rozpoczęcia</th>
                 <th>Rok zakończenia</th>
+                <?php if ($isAdmin): ?>
                 <th>Akcje</th>
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -35,14 +43,17 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($sezon['id_sezonu']) ?></td>
                     <td><?= htmlspecialchars($sezon['rok_rozpoczecia']) ?></td>
                     <td><?= htmlspecialchars($sezon['rok_zakonczenia']) ?></td>
+                    <?php if ($isAdmin): ?>
                     <td>
                         <a href="form.php?id=<?= $sezon['id_sezonu'] ?>" class="button edit">Edytuj</a>
+                        <a href="delete.php?id=<?= $sezon['id_sezonu'] ?>" class="button-delete">Usuń</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4">Brak danych o sezonach w bazie.</td>
+                    <td colspan="<?= $isAdmin ? '4' : '3' ?>">Brak danych o sezonach w bazie.</td>
                 </tr>
             <?php endif; ?>
         </tbody>
