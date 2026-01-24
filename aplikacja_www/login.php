@@ -83,6 +83,8 @@ $pageTitle = 'Logowanie';
         </form>
         <p>Nie masz konta? <a href="register.php">Zarejestruj się</a></p>
 
+    </main>
+
     <footer>
         <p>&copy; <?= date('Y') ?> System Bazy Danych NBA</p>
     </footer>

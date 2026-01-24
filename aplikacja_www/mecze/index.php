@@ -49,7 +49,7 @@ require_once $basePath . 'layout/nav.php';
                         <a href="../statystyki/index.php?id_meczu=<?= $mecz['id_meczu'] ?>" class="button">Statystyki</a>
                         <?php if ($isAdmin): ?>
                         <a href="form.php?id=<?= $mecz['id_meczu'] ?>" class="button edit">Edytuj</a>
-                        <a href="delete.php?id=<?= $mecz['id_meczu'] ?>" class="button-delete">Usuń</a>
+                        <a href="delete.php?id=<?= $mecz['id_meczu'] ?>" class="button delete">Usuń</a>
                         <?php endif; ?>
                     </td>
                 </tr>

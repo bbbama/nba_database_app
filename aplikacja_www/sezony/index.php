@@ -41,8 +41,16 @@ require_once $basePath . 'layout/nav.php';
                 <?php foreach ($sezony as $sezon): ?>
                 <tr>
                     <td><?= htmlspecialchars($sezon['id_sezonu']) ?></td>
-                    <td><?= htmlspecialchars($sezon['rok_rozpoczecia']) ?></td>
-                    <td><?= htmlspecialchars($sezon['rok_zakonczenia']) ?></td>
+                    <td>
+                        <a href="../tabela_ligowa/index.php?sezon_id=<?= htmlspecialchars($sezon['id_sezonu']) ?>">
+                            <?= htmlspecialchars($sezon['rok_rozpoczecia']) ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="../tabela_ligowa/index.php?sezon_id=<?= htmlspecialchars($sezon['id_sezonu']) ?>">
+                            <?= htmlspecialchars($sezon['rok_zakonczenia']) ?>
+                        </a>
+                    </td>
                     <?php if ($isAdmin): ?>
                     <td>
                         <a href="form.php?id=<?= $sezon['id_sezonu'] ?>" class="button edit">Edytuj</a>
