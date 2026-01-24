@@ -23,7 +23,7 @@ require_once $basePath . 'layout/nav.php';
 <main>
     <h2>Lista Kontraktów</h2>
     <?php if ($isAdmin): ?>
-    <p><a href="form.php">Dodaj nowy kontrakt</a></p>
+    <p><a href="form.php" class="button">Dodaj nowy kontrakt</a></p>
     <?php endif; ?>
     <?php if (!empty($kontrakty)): ?>
         <table>
@@ -49,8 +49,8 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars(number_format($kontrakt['wynagrodzenie_roczne'], 2, ',', ' ')) ?></td>
                     <?php if ($isAdmin): ?>
                     <td>
-                        <a href="form.php?id=<?= htmlspecialchars($kontrakt['id_kontraktu']) ?>">Edytuj</a>
-                        <a href="delete.php?id=<?= htmlspecialchars($kontrakt['id_kontraktu']) ?>" class="button-delete">Usuń</a>
+                        <a href="form.php?id=<?= htmlspecialchars($kontrakt['id_kontraktu']) ?>" class="button edit">Edytuj</a>
+                        <a href="delete.php?id=<?= htmlspecialchars($kontrakt['id_kontraktu']) ?>" class="button delete">Usuń</a>
                     </td>
                     <?php endif; ?>
                 </tr>
@@ -58,7 +58,25 @@ require_once $basePath . 'layout/nav.php';
             </tbody>
         </table>
     <?php else: ?>
-        <p>Brak kontraktów w bazie danych.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Zawodnik</th>
+                    <th>Zespół</th>
+                    <th>Data początek</th>
+                    <th>Data koniec</th>
+                    <th>Wynagrodzenie roczne</th>
+                    <?php if ($isAdmin): ?>
+                    <th>Akcje</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="<?= $isAdmin ? '6' : '5' ?>">Brak kontraktów w bazie danych.</td>
+                </tr>
+            </tbody>
+        </table>
     <?php endif; ?>
 
 <?php require_once $basePath . 'layout/footer.php'; ?>

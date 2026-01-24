@@ -3,6 +3,8 @@ $basePath = '../';
 require_once $basePath . 'auth_check.php';
 require_once $basePath . 'db.php';
 
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
+
 $trenerzy = [];
 try {
     $pdo = getDbConnection();
@@ -20,7 +22,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Trenerów</h2>
-    <p><a href="form.php">Dodaj nowego trenera</a></p>
+    <?php if ($isAdmin): ?>
+    <p><a href="form.php" class="button">Dodaj nowego trenera</a></p>
+    <?php endif; ?>
     <?php if (!empty($trenerzy)): ?>
         <table>
             <thead>
@@ -29,7 +33,9 @@ require_once $basePath . 'layout/nav.php';
                     <th>Nazwisko</th>
                     <th>Rola</th>
                     <th>Zespół</th>
+                    <?php if ($isAdmin): ?>
                     <th>Akcje</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -39,15 +45,35 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($trener['nazwisko']) ?></td>
                     <td><?= htmlspecialchars($trener['rola']) ?></td>
                     <td><?= htmlspecialchars($trener['nazwa_zespolu'] ?? 'Brak') ?></td>
+                    <?php if ($isAdmin): ?>
                     <td>
-                        <a href="form.php?id=<?= htmlspecialchars($trener['id_trenera']) ?>">Edytuj</a>
+                        <a href="form.php?id=<?= htmlspecialchars($trener['id_trenera']) ?>" class="button edit">Edytuj</a>
+                        <a href="delete.php?id=<?= htmlspecialchars($trener['id_trenera']) ?>" class="button delete">Usuń</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     <?php else: ?>
-        <p>Brak trenerów w bazie danych.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                    <th>Rola</th>
+                    <th>Zespół</th>
+                    <?php if ($isAdmin): ?>
+                    <th>Akcje</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="<?= $isAdmin ? '5' : '4' ?>">Brak trenerów w bazie danych.</td>
+                </tr>
+            </tbody>
+        </table>
     <?php endif; ?>
 
 <?php require_once $basePath . 'layout/footer.php'; ?>

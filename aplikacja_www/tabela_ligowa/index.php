@@ -3,6 +3,8 @@ $basePath = '../';
 require_once $basePath . 'auth_check.php';
 require_once $basePath . 'db.php';
 
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
+
 $tabela_ligowa_entries = [];
 try {
     $pdo = getDbConnection();
@@ -20,7 +22,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Wpisów Tabeli Ligowej</h2>
-    <p><a href="form.php">Dodaj nowy wpis do tabeli ligowej</a></p>
+    <?php if ($isAdmin): ?>
+    <p><a href="form.php" class="button">Dodaj nowy wpis do tabeli ligowej</a></p>
+    <?php endif; ?>
     <?php if (!empty($tabela_ligowa_entries)): ?>
         <table>
             <thead>
@@ -30,7 +34,9 @@ require_once $basePath . 'layout/nav.php';
                     <th>Zwycięstwa</th>
                     <th>Porażki</th>
                     <th>Miejsce</th>
+                    <?php if ($isAdmin): ?>
                     <th>Akcje</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -41,15 +47,36 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($entry['liczba_zwyciestw']) ?></td>
                     <td><?= htmlspecialchars($entry['liczba_porazek']) ?></td>
                     <td><?= htmlspecialchars($entry['miejsce_w_tabeli']) ?></td>
+                    <?php if ($isAdmin): ?>
                     <td>
-                        <a href="form.php?id=<?= htmlspecialchars($entry['id_tabeli']) ?>">Edytuj</a>
+                        <a href="form.php?id=<?= htmlspecialchars($entry['id_tabeli']) ?>" class="button edit">Edytuj</a>
+                        <a href="delete.php?id=<?= htmlspecialchars($entry['id_tabeli']) ?>" class="button delete">Usuń</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     <?php else: ?>
-        <p>Brak wpisów w tabeli ligowej w bazie danych.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sezon</th>
+                    <th>Zespół</th>
+                    <th>Zwycięstwa</th>
+                    <th>Porażki</th>
+                    <th>Miejsce</th>
+                    <?php if ($isAdmin): ?>
+                    <th>Akcje</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="<?= $isAdmin ? '6' : '5' ?>">Brak wpisów w tabeli ligowej w bazie danych.</td>
+                </tr>
+            </tbody>
+        </table>
     <?php endif; ?>
 
 <?php require_once $basePath . 'layout/footer.php'; ?>

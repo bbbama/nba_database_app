@@ -3,6 +3,8 @@ $basePath = '../';
 require_once $basePath . 'auth_check.php';
 require_once $basePath . 'db.php';
 
+$isAdmin = (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
+
 try {
     $pdo = getDbConnection();
     // Zapytanie łączące zespół z areną, aby wyświetlić nazwę areny
@@ -25,7 +27,9 @@ require_once $basePath . 'layout/nav.php';
 
 <main>
     <h2>Lista Zespołów</h2>
-    <a href="form.php" class="button">Dodaj nowy zespół</a>
+    <?php if ($isAdmin): ?>
+        <a href="form.php" class="button">Dodaj nowy zespół</a>
+    <?php endif; ?>
     <table>
         <thead>
             <tr>
@@ -34,7 +38,9 @@ require_once $basePath . 'layout/nav.php';
                 <th>Rok Założenia</th>
                 <th>Główny Trener</th>
                 <th>Arena</th>
+                <?php if ($isAdmin): ?>
                 <th>Akcje</th>
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -46,14 +52,17 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($zespol['rok_zalozenia']) ?></td>
                     <td><?= htmlspecialchars($zespol['trener_glowny']) ?></td>
                     <td><?= htmlspecialchars($zespol['nazwa_areny'] ?? 'Brak danych') ?></td>
+                    <?php if ($isAdmin): ?>
                     <td>
-                        <a href="form.php?id=<?= $zespol['id_zespolu'] ?>" class="button edit">Edytuj</a>
+                            <a href="form.php?id=<?= $zespol['id_zespolu'] ?>" class="button edit">Edytuj</a>
+                        <a href="delete.php?id=<?= $zespol['id_zespolu'] ?>" class="button delete">Usuń</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="6">Brak danych o zespołach w bazie.</td>
+                    <td colspan="<?= $isAdmin ? '6' : '5' ?>">Brak danych o zespołach w bazie.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

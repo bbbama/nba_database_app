@@ -23,7 +23,7 @@ require_once $basePath . 'layout/nav.php';
 <main>
     <h2>Lista Nagród</h2>
     <?php if ($isAdmin): ?>
-    <p><a href="form.php">Dodaj nową nagrodę</a></p>
+    <p><a href="form.php" class="button">Dodaj nową nagrodę</a></p>
     <?php endif; ?>
     <?php if (!empty($nagrody)): ?>
         <table>
@@ -45,8 +45,8 @@ require_once $basePath . 'layout/nav.php';
                     <td><?= htmlspecialchars($nagroda['rok']) ?></td>
                     <?php if ($isAdmin): ?>
                     <td>
-                        <a href="form.php?id=<?= htmlspecialchars($nagroda['id_nagrody']) ?>">Edytuj</a>
-                        <a href="delete.php?id=<?= htmlspecialchars($nagroda['id_nagrody']) ?>" class="button-delete">Usuń</a>
+                        <a href="form.php?id=<?= htmlspecialchars($nagroda['id_nagrody']) ?>" class="button edit">Edytuj</a>
+                        <a href="delete.php?id=<?= htmlspecialchars($nagroda['id_nagrody']) ?>" class="button delete">Usuń</a>
                     </td>
                     <?php endif; ?>
                 </tr>
@@ -54,7 +54,23 @@ require_once $basePath . 'layout/nav.php';
             </tbody>
         </table>
     <?php else: ?>
-        <p>Brak nagród w bazie danych.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Zawodnik</th>
+                    <th>Nazwa nagrody</th>
+                    <th>Rok</th>
+                    <?php if ($isAdmin): ?>
+                    <th>Akcje</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="<?= $isAdmin ? '4' : '3' ?>">Brak nagród w bazie danych.</td>
+                </tr>
+            </tbody>
+        </table>
     <?php endif; ?>
 
 <?php require_once $basePath . 'layout/footer.php'; ?>

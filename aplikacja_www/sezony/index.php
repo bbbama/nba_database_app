@@ -46,7 +46,7 @@ require_once $basePath . 'layout/nav.php';
                     <?php if ($isAdmin): ?>
                     <td>
                         <a href="form.php?id=<?= $sezon['id_sezonu'] ?>" class="button edit">Edytuj</a>
-                        <a href="delete.php?id=<?= $sezon['id_sezonu'] ?>" class="button-delete">Usuń</a>
+                        <a href="delete.php?id=<?= $sezon['id_sezonu'] ?>" class="button delete">Usuń</a>
                     </td>
                     <?php endif; ?>
                 </tr>
