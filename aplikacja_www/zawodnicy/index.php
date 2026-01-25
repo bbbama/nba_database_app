@@ -39,8 +39,16 @@ require_once $basePath . 'layout/nav.php';
             <?php if (count($zawodnicy) > 0): ?>
                 <?php foreach ($zawodnicy as $zawodnik): ?>
                 <tr>
-                    <td><?= htmlspecialchars($zawodnik['imie']) ?></td>
-                    <td><?= htmlspecialchars($zawodnik['nazwisko']) ?></td>
+                    <td>
+                        <a href="details.php?id=<?= $zawodnik['id_zawodnika'] ?>">
+                            <?= htmlspecialchars($zawodnik['imie']) ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="details.php?id=<?= $zawodnik['id_zawodnika'] ?>">
+                            <?= htmlspecialchars($zawodnik['nazwisko']) ?>
+                        </a>
+                    </td>
                     <td><?= htmlspecialchars($zawodnik['pozycja']) ?></td>
                     <td><?= htmlspecialchars($zawodnik['nazwa_zespolu']) ?></td>
                     <td>

@@ -40,7 +40,11 @@ require_once $basePath . 'layout/nav.php';
             <?php if (count($mecze) > 0): ?>
                 <?php foreach ($mecze as $mecz): ?>
                 <tr>
-                    <td><?= htmlspecialchars($mecz['data_meczu']) ?></td>
+                    <td>
+                        <a href="details.php?id=<?= $mecz['id_meczu'] ?>">
+                            <?= htmlspecialchars($mecz['data_meczu']) ?>
+                        </a>
+                    </td>
                     <td><?= htmlspecialchars($mecz['sezon']) ?></td>
                     <td><?= htmlspecialchars($mecz['gospodarz']) ?></td>
                     <td><?= htmlspecialchars($mecz['wynik_gospodarza']) ?> : <?= htmlspecialchars($mecz['wynik_goscia']) ?></td>
