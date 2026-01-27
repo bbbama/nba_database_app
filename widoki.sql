@@ -38,3 +38,22 @@ FROM mecz m
 JOIN zespol g ON m.id_gospodarza = g.id_zespolu
 JOIN zespol z ON m.id_goscia = z.id_zespolu
 LEFT JOIN sezon s ON m.id_sezonu = s.id_sezonu;
+
+DROP VIEW IF EXISTS widok_liderzy_statystyk;
+-- Widok 4: Liderzy statystyk (zawodnicy ze średnią punktów > 10 i co najmniej 5 meczów)
+-- Użycie klauzuli HAVING do filtrowania po zagregowanych danych
+CREATE OR REPLACE VIEW widok_liderzy_statystyk AS
+SELECT
+  z.id_zawodnika,
+  z.imie || ' ' || z.nazwisko AS zawodnik_nazwa,
+  zes.nazwa AS nazwa_zespolu,
+  COUNT(s.id_meczu) AS liczba_meczow,
+  COALESCE(ROUND(AVG(s.punkty)::numeric, 2), 0) AS srednie_punkty,
+  COALESCE(ROUND(AVG(s.asysty)::numeric, 2), 0) AS srednie_asysty,
+  COALESCE(ROUND(AVG(s.zbiorki)::numeric, 2), 0) AS srednie_zbiorki
+FROM zawodnik z
+JOIN statystyki_meczu s ON z.id_zawodnika = s.id_zawodnika
+LEFT JOIN zespol zes ON z.id_zespolu = zes.id_zespolu
+GROUP BY z.id_zawodnika, zes.nazwa
+HAVING
+  COUNT(s.id_meczu) >= 5 AND AVG(s.punkty) > 10;

@@ -18,6 +18,9 @@ if (session_status() === PHP_SESSION_NONE) {
             <li><a href="<?= $basePath ?? '' ?>kontuzja/">Kontuzje</a></li>
             <li><a href="<?= $basePath ?? '' ?>nagroda/">Nagrody</a></li>
             <li><a href="<?= $basePath ?? '' ?>tabela_ligowa/">Tabela Ligowa</a></li>
+            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                <li><a href="<?= $basePath ?? '' ?>uzytkownicy/">Zarządzaj Użytkownikami</a></li>
+            <?php endif; ?>
         <?php endif; ?>
     </ul>
     <div class="auth-links">

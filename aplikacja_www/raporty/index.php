@@ -15,5 +15,6 @@ require_once $basePath . 'layout/nav.php';
         <li><a href="raport_srednie_statystyki.php">Średnie statystyki zawodników</a></li>
         <li><a href="raport_tabela_ligowa.php">Tabela ligowa dla sezonu</a></li>
         <li><a href="raport_najwiecej_punktow.php">Zawodnik z największą liczbą punktów w jednym meczu</a></li>
+        <li><a href="raport_liderzy_statystyk.php">Liderzy statystyk (zawodnicy z wysoką średnią punktów)</a></li>
     </ul>
 <?php require_once $basePath . 'layout/footer.php'; ?>
