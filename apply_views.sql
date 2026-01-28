@@ -1,4 +1,4 @@
--- Plik: update_views.sql (v2)
+-- Plik: apply_views.sql
 -- Cel: Aktualizacja i stworzenie widoków bazodanowych oraz modyfikacja tabeli 'tabela_ligowa'.
 -- Wersja 2: Dodano 'DROP VIEW IF EXISTS', aby uniknąć błędów przy zmianie kolejności/nazw kolumn.
 
@@ -40,25 +40,22 @@ ALTER TABLE tabela_ligowa DROP COLUMN IF EXISTS miejsce_w_tabeli;
 -- 2. Ulepszony widok średnich statystyk zawodnika
 --------------------------------------------------------------------------------
 DROP VIEW IF EXISTS widok_srednie_statystyki_zawodnika;
-CREATE VIEW widok_srednie_statystyki_zawodnika AS
+CREATE OR REPLACE VIEW widok_srednie_statystyki_zawodnika AS
 SELECT
   z.id_zawodnika,
   z.imie || ' ' || z.nazwisko AS zawodnik_nazwa,
   zes.nazwa AS nazwa_zespolu,
-  COUNT(s.id_statystyki) AS liczba_meczow,
+  COUNT(s.id_meczu) AS liczba_meczow,
   COALESCE(ROUND(AVG(s.punkty)::numeric, 2), 0) AS srednie_punkty,
   COALESCE(ROUND(AVG(s.asysty)::numeric, 2), 0) AS srednie_asysty,
-  COALESCE(ROUND(AVG(s.zbiorki)::numeric, 2), 0) AS srednie_zbiorki
+  COALESCE(ROUND(AVG(s.zbiorki)::numeric, 2), 0) AS srednie_zbiorki,
+  COALESCE(ROUND(AVG(s.minuty)::numeric, 2), 0) AS srednie_minuty
 FROM zawodnik z
-LEFT JOIN statystyki_meczu s ON z.id_zawodnika = s.id_zawodnika
 LEFT JOIN zespol zes ON z.id_zespolu = zes.id_zespolu
-GROUP BY z.id_zawodnika, z.imie, z.nazwisko, zes.nazwa
-ORDER BY zawodnik_nazwa;
+LEFT JOIN statystyki_meczu s ON z.id_zawodnika = s.id_zawodnika
+GROUP BY z.id_zawodnika, zes.nazwa;
 
 
---------------------------------------------------------------------------------
--- 3. Ulepszony widok wyników meczów
---------------------------------------------------------------------------------
 DROP VIEW IF EXISTS widok_wyniki_meczy;
 CREATE VIEW widok_wyniki_meczy AS
 SELECT
@@ -77,10 +74,6 @@ JOIN zespol gosc ON m.id_goscia = gosc.id_zespolu
 LEFT JOIN sezon s ON m.id_sezonu = s.id_sezonu
 ORDER BY m.data_meczu DESC;
 
-
---------------------------------------------------------------------------------
--- 4. Ulepszony widok zawodników z zespołem
---------------------------------------------------------------------------------
 DROP VIEW IF EXISTS widok_zawodnicy_z_zespolem;
 CREATE VIEW widok_zawodnicy_z_zespolem AS
 SELECT
