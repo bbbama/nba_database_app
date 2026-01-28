@@ -2,7 +2,7 @@
 services:
   - type: web
     name: nba-app
-    env: php
+    runtime: php
     buildCommand: "" # Render's PHP environment usually handles dependencies, or use 'composer install' if composer.json exists
     startCommand: "nginx -g 'daemon off;' && php-fpm" # Render's PHP environment often handles this default for PHP web services
     rootDir: aplikacja_www
