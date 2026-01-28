@@ -12,8 +12,6 @@ services:
     # buildCommand is typically left empty for 'docker' runtime as the Dockerfile handles the build process.
     buildCommand: ""
     # startCommand is also handled by the CMD in your Dockerfile.
-    # It's good practice to align this with your Dockerfile's CMD if Render provides an override.
-    startCommand: "nginx -g 'daemon off;' && php-fpm"
     envVars:
       # DATABASE_URL is automatically populated by Render for linked databases.
       # Your config.php should parse this to extract credentials.
