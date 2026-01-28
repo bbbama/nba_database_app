@@ -1,16 +1,17 @@
-FROM php:8.2-fpm
+# Startujemy od obrazu PHP z Apache
+FROM php:8.2-apache
 
+# Instalujemy PostgreSQL PDO i inne potrzebne rozszerzenia
 RUN apt-get update && apt-get install -y \
-    nginx \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip unzip \
-    && docker-php-ext-install pdo_pgsql mysqli
+    libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && a2enmod rewrite
 
-COPY . /var/www/html
+# Ustawiamy katalog roboczy aplikacji
 WORKDIR /var/www/html
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# Kopiujemy wszystkie pliki aplikacji
+COPY . .
 
-CMD service php8.2-fpm start && nginx -g 'daemon off;'
+# Otwieramy port 80
+EXPOSE 80
