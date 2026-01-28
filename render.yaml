@@ -37,8 +37,8 @@ services:
       - key: APP_ENV # Optional: set application environment
         value: "production"
 
-  - type: database
-    name: nba-db
+databases:
+  - name: nba-db
     databaseName: nba_database # Your desired database name
     user: nba_user # Your desired database user
     plan: free # Choose your desired plan: free, starter, or professional
