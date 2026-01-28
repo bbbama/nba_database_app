@@ -1,17 +1,18 @@
-# Startujemy od obrazu PHP z Apache
 FROM php:8.2-apache
 
-# Instalujemy PostgreSQL PDO i inne potrzebne rozszerzenia
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
+# Instalacja PDO PostgreSQL
+RUN apt-get update && apt-get install -y libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql \
     && a2enmod rewrite
 
-# Ustawiamy katalog roboczy aplikacji
+# Ustaw katalog aplikacji
 WORKDIR /var/www/html
 
-# Kopiujemy wszystkie pliki aplikacji
+# Kopiujemy całą aplikację
 COPY . .
 
-# Otwieramy port 80
+# Naprawiamy uprawnienia dla Apache (www-data)
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
 EXPOSE 80
