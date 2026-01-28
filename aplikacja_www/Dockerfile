@@ -8,10 +8,9 @@ RUN apt-get update && apt-get install -y libpq-dev \
 # Ustaw katalog aplikacji
 WORKDIR /var/www/html
 
-# Kopiujemy całą aplikację
+# Kopiujemy wszystkie pliki aplikacji
 COPY . .
 
-# Naprawiamy uprawnienia dla Apache (www-data)
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
