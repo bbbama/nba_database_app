@@ -1,0 +1,44 @@
+# render.yaml
+services:
+  - type: web
+    name: nba-app
+    env: php
+    buildCommand: "" # Render's PHP environment usually handles dependencies, or use 'composer install' if composer.json exists
+    startCommand: "nginx -g 'daemon off;' && php-fpm" # Render's PHP environment often handles this default for PHP web services
+    rootDir: aplikacja_www
+    envVars:
+      - key: DATABASE_URL # Render automatically populates this with a connection string to the linked database
+        fromDatabase:
+          name: nba-db
+          property: connectionString
+      # Explicit database credentials for config.php
+      - key: DB_HOST
+        fromDatabase:
+          name: nba-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: nba-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: nba-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: nba-db
+          property: user
+      - key: DB_PASS
+        fromDatabase:
+          name: nba-db
+          property: password
+      - key: PHP_VERSION # Optional: specify PHP version, e.g., 8.2
+        value: "8.2"
+      - key: APP_ENV # Optional: set application environment
+        value: "production"
+
+  - type: postgres
+    name: nba-db
+    databaseName: nba_database # Your desired database name
+    user: nba_user # Your desired database user
+    plan: free # Choose your desired plan: free, starter, or professional

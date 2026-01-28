@@ -4,493 +4,140 @@ BAZY DANYCH I
 
 I. Projekt koncepcji, założenia
 
-Tematem projektu jest aplikacja bazodanowa z przyjemnym dla użytkownika interfejsem graficznym, służąca  do zarządzania danymi dotyczącymi koszykarskiej ligi NBA. System obejmuje informacje o drużynach, zawodnikach, meczach oraz statystykach sportowych, odwzorowując rzeczywistą strukturę danych sportowych.
+1. Zdefiniowanie tematu projektu:
+   Projekt ma na celu stworzenie aplikacji bazodanowej do zarządzania danymi związanymi z ligą NBA. Aplikacja umożliwia przeglądanie, dodawanie, edycję i usuwanie informacji o zawodnikach, zespołach, meczach, kontuzjach, kontraktach, arenach, sezonach, tabelach ligowych, trenerach oraz nagrodach. System zawiera również funkcje raportowania i system autoryzacji z różnymi poziomami dostępu.
 
-Celem projektu jest:
-stworzenie spójnej i poprawnej logicznie bazy danych,
-zaprezentowanie praktycznego wykorzystania relacyjnych baz danych,
-umożliwienie użytkownikowi wygodnej obsługi danych poprzez GUI,
-wykorzystanie mechanizmów PostgreSQL, takich jak klucze obce, widoki, funkcje agregujące, wyzwalacze oraz walidacja danych.
+2. Analiza wymagań użytkownika:
+   Projektowana baza danych ma spełniać następujące funkcjonalności:
+   - Zarządzanie podstawowymi danymi ligi NBA (zawodnicy, zespoły, mecze, areny, sezony).
+   - Śledzenie szczegółowych informacji o zawodnikach (kontrakty, kontuzje, nagrody, statystyki meczowe).
+   - Automatyczne aktualizowanie tabeli ligowej na podstawie wyników meczów.
+   - Generowanie raportów i statystyk.
+   - Zapewnienie bezpieczeństwa danych poprzez system autoryzacji z rolami "admin" i "user".
+   - Możliwość przeglądania i modyfikacji danych poprzez intuicyjny interfejs webowy.
 
-W projekcie przyjęto, że użytkownikiem systemu jest administrator danych ligi NBA np. analityk sportowy, który oczekuje intuicyjnego dostępu do danych oraz możliwości ich analizy.
-
-Projektowana baza danych powinna spełniać następujące wymagania funkcjonalne:
-przechowywanie danych o drużynach NBA (nazwa, miasto, trener, rok założenia),
-przechowywanie danych o zawodnikach wraz z przypisaniem do drużyn,
-rejestrowanie informacji o meczach (data, drużyna gospodarzy i gości, wynik),
-zapisywanie statystyk zawodników w poszczególnych meczach,
-obsługa dodatkowych elementów, takich jak areny (hale), sezony, tabele ligowe, kontrakty, kontuzje, trenerzy i nagrody zawodników,
-możliwość dodawania, edytowania oraz przeglądania danych,
-generowanie raportów i zestawień statystycznych,
-zapewnienie spójności danych i eliminacja błędnych wpisów.
-
-Baza danych realizuje następujące podstawowe funkcje:
-zarządzanie relacjami pomiędzy tabelami (relacje 1-n oraz n-m),
-automatyczna kontrola poprawności danych przy użyciu kluczy głównych i obcych,
-walidacja danych za pomocą ograniczeń (CHECK), wyzwalaczy oraz reguł integralności,
-obliczanie statystyk zbiorczych np. suma punktów zawodnika,
-udostępnianie danych w formie widoków ułatwiających analizę i raportowanie,
-wspieranie logiki biznesowej po stronie bazy danych.
+3. Zaprojektowanie funkcji:
+   Podstawowe funkcje realizowane w bazie danych i aplikacji to:
+   - CRUD (Create, Read, Update, Delete) dla głównych encji (zawodnicy, zespoły, mecze, areny, sezony, trenerzy, kontrakty, kontuzje, nagrody, tabele ligowe, użytkownicy).
+   - Generowanie raportów: średnie statystyki zawodników, tabela ligowa, najwięcej punktów w meczu, liderzy statystyk.
+   - System logowania i wylogowywania.
+   - Autoryzacja dostępu do poszczególnych funkcji aplikacji w zależności od roli użytkownika (admin/user).
+   - Automatyczna obsługa logiki biznesowej poprzez wyzwalacze bazodanowe (np. aktualizacja tabeli ligowej).
+   - Walidacja danych na poziomie bazy danych i aplikacji.
 
 II. Projekt diagramów (konceptualny)
 
-Wejścia danych do systemu:
-dane drużyn (nazwa, miasto, trener, rok założenia),
-dane zawodników (imię, nazwisko, pozycja, drużyna),
-dane meczów (data, drużyny, wyniki),
-statystyki zawodników w meczach (punkty, asysty, zbiórki, minuty),
-dane o kontuzjach zawodników,
-dane o kontraktach zawodników,
-dane o arenach sportowych,
-dane o sezonach,
-wyniki tabel ligowych,
-dane o trenerach i sztabie,
-informacje o przyznanych nagrodach.
+5. Zdefiniowanie encji (obiektów) oraz ich atrybutów.
+   Główne encje w systemie obejmują:
+   - **zespol**: id_zespolu, nazwa, miasto, rok_zalozenia, trener_glowny, id_arena
+   - **zawodnik**: id_zawodnika, imie, nazwisko, pozycja, data_urodzenia, id_zespolu
+   - **mecz**: id_meczu, data_meczu, id_gospodarza, id_goscia, wynik_gospodarza, wynik_goscia, id_sezonu
+   - **statystyki_meczu**: id_statystyki, id_meczu, id_zawodnika, minuty, punkty, asysty, zbiorki (encja asocjacyjna)
+   - **kontuzja**: id_kontuzji, id_zawodnika, typ_kontuzji, data_rozpoczecia, data_zakonczenia, status
+   - **kontrakt**: id_kontraktu, id_zawodnika, id_zespolu, data_poczatek, data_koniec, wynagrodzenie_roczne
+   - **arena**: id_arena, nazwa, miasto, pojemnosc, rok_otwarcia
+   - **sezon**: id_sezonu, rok_rozpoczecia, rok_zakonczenia
+   - **tabela_ligowa**: id_tabeli, id_sezonu, id_zespolu, liczba_zwyciestw, liczba_porazek, miejsce_w_tabeli
+   - **trener**: id_trenera, imie, nazwisko, rola, id_zespolu
+   - **nagroda**: id_nagrody, id_zawodnika, nazwa_nagrody, rok
+   - **uzytkownicy**: id_uzytkownika, login, hash_hasla, rola
 
-Procesy systemu:
-dodawanie i modyfikacja danych,
-walidacja danych np. poprawność wyników,
-obliczanie statystyk zbiorczych,
-generowanie raportów i widoków.
+6. Zaprojektowanie relacji pomiędzy encjami:
+   - Zespol - Zawodnik: 1-do-N (jeden zespół ma wielu zawodników)
+   - Zespol - Mecz: 1-do-N (jeden zespół może być gospodarzem/gościem wielu meczów)
+   - Zawodnik - Statystyki_meczu: 1-do-N (jeden zawodnik ma statystyki z wielu meczów)
+   - Mecz - Statystyki_meczu: 1-do-N (jeden mecz ma statystyki wielu zawodników)
+   - Zawodnik - Kontuzja: 1-do-N (jeden zawodnik ma wiele kontuzji)
+   - Zawodnik - Kontrakt: 1-do-N (jeden zawodnik ma wiele kontraktów)
+   - Zespol - Kontrakt: 1-do-N (jeden zespół podpisuje wiele kontraktów)
+   - Zespol - Arena: 1-do-1 (jeden zespół ma jedną główną arenę, arena może być główną dla jednego zespołu)
+   - Sezon - Mecz: 1-do-N (jeden sezon zawiera wiele meczów)
+   - Sezon - Tabela_ligowa: 1-do-N (jednemu sezonowi odpowiada jedna tabela ligowa)
+   - Zespol - Tabela_ligowa: 1-do-N (jeden zespół występuje w wielu tabelach ligowych dla różnych sezonów)
+   - Zespol - Trener: 1-do-N (jeden zespół ma wielu trenerów)
+   - Zawodnik - Nagroda: 1-do-N (jeden zawodnik może zdobyć wiele nagród)
 
-Przechowywanie danych:
-tabele relacyjne w bazie PostgreSQL: zespół, zawodnik, mecz, statystyki meczu, kontuzja, kontrakt, arena, sezon, tabela_ligowa, trener, nagroda.
-
-Wyjścia danych z systemu:
-zestawienia zawodników i drużyn,
-wyniki meczów,
-średnie statystyki zawodników,
-raporty i widoki prezentowane w aplikacji GUI.
-
-Encje:
-Encja: Zespół
-Reprezentuje drużynę NBA.
-id_zespolu - klucz glowny,
-nazwa,
-miasto,
-rok_zalozenia,
-trener_glowny.
-
-Encja: Zawodnik
-Reprezentuje zawodnika NBA.
-id_zawodnika - klucz główny,
-imie,
-nazwisko
-pozycja,
-data_urodzenia,
-id_zespolu - klucz obcy.
-
-Encja: Mecz
-Reprezentuje rozegrany mecz NBA.
-id_meczu - klucz główny,
-data_meczu,
-id_gospodarza - klucz obcy,
-id_goscia - klucz obcy,
-wynik_gospodarza,
-wynik_goscia.
-
-Encja: Statystyki_meczu
-Encja asocjacyjna przechowująca statystyki zawodnika w konkretnym meczu.
-id_statystyki - klucz główny,
-id_meczu - klucz obcy,
-id_zawodnika - klucz obcy,
-minuty,
-punkty,
-asysty,
-zbiorki.
-
-Encja: Kontuzja
-Reprezentuje kontuzje odniesiona przez zawodnika.
-id_kontuzji - klucz główny,
-id_zawodnika - klucz obcy,
-typ_kontuzji,
-data_rozpoczecia,
-data_zakonczenia,
-status.
-
-Encja: Kontrakt
-Reprezentuje kontrakt zawarty miedzy zawodnikiem a zespolem.
-id_kontraktu - klucz główny,
-id_zawodnika - klucz obcy,
-id_zespolu - klucz obcy,
-data_poczatek,
-data_koniec,
-wynagrodzenie_roczne.
-
-Encja: Arena
-Reprezentuje arene sportowa, na ktorej odbywaja sie mecze.
-id_arena - klucz główny,
-nazwa,
-miasto,
-pojemnosc,
-rok_otwarcia.
-
-Encja: Sezon
-Reprezentuje sezon rozgrywek NBA.
-id_sezonu - klucz główny,
-rok_rozpoczecia,
-rok_zakonczenia.
-
-Encja: Tabela_ligowa
-Reprezentuje pozycje zespolu w tabeli ligowej w danym sezonie.
-id_tabeli - klucz główny,
-id_sezonu - klucz obcy,
-id_zespolu - klucz obcy,
-liczba_zwyciestw,
-liczba_porazek,
-miejsce_w_tabeli.
-
-Encja: Trener
-Reprezentuje trenera lub czlonka sztabu trenerskiego.
-id_trenera - klucz główny,
-imie,
-nazwisko,
-rola,
-id_zespolu - klucz obcy.
-
-Encja: Nagroda
-Reprezentuje nagrode przyznana zawodnikowi.
-id_nagrody - klucz główny,
-id_zawodnika - klucz obcy,
-nazwa_nagrody,
-rok.
-
-W systemie zaprojektowano następujące relacje:
-Relacja: Zespół - Gracz (1:N)
-Jeden zespół może mieć wielu graczy.
-Gracz może należeć do jednego zespołu (lub tymczasowo do żadnego).
-Relacja realizowana przez klucz obcy id_zespolu w tabeli zawodnik.
-
-Relacja: Zespół - Mecz (1:N)
-Zespół może brać udział w wielu meczach jako gospodarz lub gość.
-Każdy mecz ma dokładnie dwóch uczestników (gospodarza i gościa).
-Relacja realizowana przez klucze obce id_gospodarza i id_goscia w tabeli mecz.
-
-Relacja: Gracz -  Mecz (N:M)
-Gracz może brać udział w wielu meczach.
-Mecz obejmuje wielu graczy.
-Relacja wiele-do-wielu została wyeliminowana poprzez wprowadzenie tabeli pośredniej statystyki_meczu.
-Tabela asocjacyjna:
-przechowuje statystyki gracza w danym meczu,
-posiada unikalne połączenie id_meczu + id_zawodnika,
-stanowi końcowy element logiki bazy danych.
-
-Relacja: Zawodnik - Kontuzja (1:N)
-Jeden zawodnik może mieć wiele kontuzji w swojej karierze.
-Każdy wpis o kontuzji odnosi się do jednego zawodnika.
-Relacja realizowana przez klucz obcy id_zawodnika w tabeli kontuzja.
-
-Relacja: Zawodnik - Zespół (N:M przez Kontrakt)
-Zawodnik może mieć w swojej karierze kontrakty z wieloma zespołami.
-Zespół podpisuje kontrakty z wieloma zawodnikami.
-Relacja jest realizowana przez tabelę asocjacyjną kontrakt, która przechowuje szczegóły umowy (okres, wynagrodzenie).
-
-Relacja: Zespół - Arena (N:1)
-Wiele zespołów może rozgrywać mecze na tej samej arenie (chociaż zazwyczaj jeden zespół ma jedną główną arenę).
-Każdy zespół ma przypisaną jedną, główną arenę.
-Relacja realizowana przez klucz obcy id_arena w tabeli zespol.
-
-Relacja: Sezon - Mecz (1:N)
-Jeden sezon składa się z wielu meczy.
-Każdy mecz jest przypisany do konkretnego sezonu.
-Relacja realizowana przez klucz obcy id_sezonu w tabeli mecz.
-
-Relacja: Sezon/Zespół - Tabela ligowa (1:1 dla pary)
-Tabela ligowa przechowuje pozycję jednego zespołu w jednym, konkretnym sezonie.
-Występuje unikalne powiązanie (id_sezonu, id_zespolu).
-
-Relacja: Zespół - Trener (1:N)
-Jeden zespół zatrudnia wielu członków sztabu trenerskiego (główny, asystenci).
-Każdy trener jest przypisany do jednego zespołu.
-Relacja realizowana przez klucz obcy id_zespolu w tabeli trener.
-
-Relacja: Zawodnik - Nagroda (1:N)
-Jeden zawodnik może zdobyć wiele nagród w trakcie swojej kariery.
-Każda nagroda jest przypisana do konkretnego zawodnika.
-Relacja realizowana przez klucz obcy id_zawodnika w tabeli nagroda.
-
-Diagram ERD:
-
+   Relacje wiele-do-wielu (N:M) zostały rozbite na encje asocjacyjne, np. relacja między `zawodnik` a `mecz` jest obsługiwana przez encję `statystyki_meczu`.
 
 III. Projekt logiczny
 
-9. Analiza zależności funkcyjnych i normalizacja tabel (3NF i BCNF)
+7. Projektowanie tabel, kluczy, indeksów:
+   Poniżej przedstawiono strukturę tabel, klucze główne (PRIMARY KEY), klucze obce (FOREIGN KEY) oraz zdefiniowane indeksy. Wszystkie nazwy tabel i kolumn są w języku polskim.
 
-W tej części sprawdzamy, czy tabele w naszej bazie danych spełniają warunki **Trzeciej Postaci Normalnej (3NF)** oraz **Postaci Normalnej Boyce’a-Codda (BCNF)**. Zapewnienie zgodności z tymi postaciami jest kluczowe dla stworzenia solidnej i dobrze zaprojektowanej bazy danych, która unika problemów z niespójnością danych.
+   - **zespol**: id_zespolu (PK), id_arena (FK do arena.id_arena)
+   - **zawodnik**: id_zawodnika (PK), id_zespolu (FK do zespol.id_zespolu)
+   - **mecz**: id_meczu (PK), id_gospodarza (FK do zespol.id_zespolu), id_goscia (FK do zespol.id_zespolu), id_sezonu (FK do sezon.id_sezonu)
+   - **statystyki_meczu**: id_statystyki (PK), id_meczu (FK do mecz.id_meczu), id_zawodnika (FK do zawodnik.id_zawodnika), unikalna kombinacja (id_meczu, id_zawodnika)
+   - **kontuzja**: id_kontuzji (PK), id_zawodnika (FK do zawodnik.id_zawodnika)
+   - **kontrakt**: id_kontraktu (PK), id_zawodnika (FK do zawodnik.id_zawodnika), id_zespolu (FK do zespol.id_zespolu)
+   - **arena**: id_arena (PK)
+   - **sezon**: id_sezonu (PK)
+   - **tabela_ligowa**: id_tabeli (PK), id_sezonu (FK do sezon.id_sezonu), id_zespolu (FK do zespol.id_zespolu), unikalna kombinacja (id_sezonu, id_zespolu)
+   - **trener**: id_trenera (PK), id_zespolu (FK do zespol.id_zespolu)
+   - **nagroda**: id_nagrody (PK), id_zawodnika (FK do zawodnik.id_zawodnika)
+   - **uzytkownicy**: id_uzytkownika (PK), login (UNIQUE)
 
-*   **3NF (Trzecia postać normalna):** W uproszczeniu, tabela jest w 3NF, jeśli jej wszystkie atrybuty zależą *tylko* od klucza głównego, a nie od innych atrybutów niebędących kluczem. Zapobiega to sytuacji, w której zmiana jednej danej pociąga za sobą konieczność zmiany innych danych w tej samej tabeli.
+   Indeksy zostały utworzone dla kluczy obcych (`idx_zawodnik_zespol`, `idx_statystyki_meczu_mecz`, `idx_statystyki_meczu_zawodnik`) w celu optymalizacji zapytań.
 
-*   **BCNF (Postać normalna Boyce'a-Codda):** To jest nieco bardziej rygorystyczna wersja 3NF. Mówi, że każdy atrybut lub grupa atrybutów, która determinuje (jednoznacznie określa) jakiekolwiek inne atrybuty, musi być superkluczem (czyli zawierać w sobie klucz kandydujący).
+8. Słowniki danych:
+   Większość pól tekstowych wykorzystuje typ `VARCHAR` z odpowiednio dobraną długością. Pola numeryczne to `SERIAL` (dla kluczy głównych), `INTEGER`, `SMALLINT`, `NUMERIC(12,2)` (dla wynagrodzeń). Daty są przechowywane jako `DATE`.
+   Ograniczenia dziedzinowe (`CHECK`) zostały zastosowane m.in. dla:
+   - `rok_zalozenia`, `rok_otwarcia`, `rok_rozpoczecia`, `rok_zakonczenia` (zakres lat).
+   - `wynik_gospodarza`, `wynik_goscia`, `minuty`, `punkty`, `asysty`, `zbiorki`, `liczba_zwyciestw`, `liczba_porazek`, `wynagrodzenie_roczne`, `pojemnosc` (wartości nieujemne).
+   - `status` w tabeli `kontuzja` (dozwolone wartości: 'aktywna', 'wyleczona', 'nieznany').
+   - `rola` w tabeli `trener` i `uzytkownicy` (dozwolone wartości).
+   - `CONSTRAINT roznorodne_druzyny CHECK (id_gospodarza <> id_goscia)` w tabeli `mecz`.
 
-**Analiza tabel w projekcie:**
+9. Analiza zależności funkcyjnych i normalizacja tabel (dekompozycja do 3NF ewentualnie BCNF):
+   Struktura tabel została zaprojektowana z uwzględnieniem zasad normalizacji, dążąc do osiągnięcia trzeciej postaci normalnej (3NF) w celu eliminacji redundancji i anomalii aktualizacji. Encje asocjacyjne (np. `statystyki_meczu`) poprawnie obsługują relacje wiele-do-wielu.
 
-**1. Tabele z prostym kluczem głównym (np. `zawodnik`, `mecz`, `arena`, `zespol` itd.)**
+11. Zaprojektowanie operacji na danych:
+    a. **Widoki (Views):**
+       - `widok_zawodnicy_z_zespolem`: Podstawowe informacje o zawodnikach wraz z nazwą zespołu.
+       - `widok_srednie_statystyki_zawodnika`: Średnie statystyki punktów, asyst, zbiórek i minut dla każdego zawodnika. Wykorzystuje funkcje agregujące (`AVG`, `COUNT`) i grupowanie (`GROUP BY`).
+       - `widok_wyniki_meczy`: Szczegółowe wyniki meczów z nazwami zespołów i sezonem.
+       - `widok_liderzy_statystyk`: Zawodnicy, którzy zagrali w co najmniej 5 meczach i mają średnią powyżej 10 punktów na mecz. Wykorzystuje funkcje agregujące (`AVG`, `COUNT`), grupowanie (`GROUP BY`) oraz filtrowanie po zagregowanych danych (`HAVING`).
 
-Większość naszych tabel, jak `zawodnik` czy `arena`, ma pojedynczy, prosty klucz główny (np. `id_zawodnika`).
-*   W tych tabelach wszystkie pozostałe kolumny (np. `imie`, `pozycja`) opisują bezpośrednio byt określony przez klucz główny. Nie ma żadnych zależności przechodnich (atrybut niekluczowy nie zależy od innego atrybutu niekluczowego), więc **warunek 3NF jest spełniony**.
-*   Jedynym determinantem (atrybutem, od którego zależą inne) jest sam klucz główny. Ponieważ klucz główny jest z definicji superkluczem, **warunek BCNF jest również spełniony**.
-
-**2. Tabele asocjacyjne (`statystyki_meczu` i `tabela_ligowa`)**
-
-Te tabele mają, oprócz własnego klucza głównego (np. `id_statystyki`), także złożony klucz kandydujący (np. `(id_meczu, id_zawodnika)`), który zapewnia unikalność wpisów.
-*   Atrybuty takie jak `punkty` czy `minuty` zależą od całego złożonego klucza kandydującego, a nie od żadnego atrybutu niekluczowego. Dlatego **warunek 3NF jest spełniony**.
-*   W tych tabelach mamy dwa determinanty: klucz główny (`id_statystyki`) oraz klucz kandydujący (`(id_meczu, id_zawodnika)`). Oba są superkluczami. Oznacza to, że **warunek BCNF jest także spełniony**.
-
-**Podsumowanie**
-
-Wszystkie tabele w naszym projekcie zostały zaprojektowane zgodnie z wymaganiami **Postaci Normalnej Boyce'a-Codda (BCNF)**. Dzięki temu schemat bazy danych jest poprawny, spójny i odporny na anomalie związane z manipulacją danymi.
-
-
-8. Słowniki danych
-
-Poniżej przedstawiono słownik danych dla każdej tabeli w bazie, zawierający opis kolumn, ich typy danych oraz istotne uwagi i ograniczenia.
-
-**1. Tabela: `zespol`**
-*   `id_zespolu` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator zespołu.
-*   `nazwa` (VARCHAR(100)): Nazwa zespołu, unikalna dla każdego zespołu.
-*   `miasto` (VARCHAR(100)): Miasto, z którego pochodzi zespół.
-*   `rok_zalozenia` (SMALLINT): Rok założenia zespołu (wartość > 1850 i <= bieżący rok).
-*   `trener_glowny` (VARCHAR(100)): Imię i nazwisko głównego trenera zespołu.
-*   `id_arena` (INTEGER): Klucz obcy, identyfikator głównej areny zespołu (może być NULL).
-
-**2. Tabela: `zawodnik`**
-*   `id_zawodnika` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator zawodnika.
-*   `imie` (VARCHAR(50)): Imię zawodnika.
-*   `nazwisko` (VARCHAR(50)): Nazwisko zawodnika.
-*   `pozycja` (VARCHAR(30)): Pozycja, na której gra zawodnik (np. 'Rozgrywający', 'Skrzydłowy', 'Środkowy').
-*   `data_urodzenia` (DATE): Data urodzenia zawodnika.
-*   `id_zespolu` (INTEGER): Klucz obcy, identyfikator zespołu, do którego należy zawodnik (może być NULL, jeśli zawodnik jest bez drużyny).
-
-**3. Tabela: `mecz`**
-*   `id_meczu` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator meczu.
-*   `data_meczu` (DATE): Data rozegrania meczu.
-*   `id_gospodarza` (INTEGER): Klucz obcy, identyfikator zespołu gospodarzy.
-*   `id_goscia` (INTEGER): Klucz obcy, identyfikator zespołu gości.
-*   `wynik_gospodarza` (SMALLINT): Wynik punktowy zespołu gospodarzy (wartość >= 0).
-*   `wynik_goscia` (SMALLINT): Wynik punktowy zespołu gości (wartość >= 0).
-*   `id_sezonu` (INTEGER): Klucz obcy, identyfikator sezonu, w którym rozegrano mecz (może być NULL).
-*   `CONSTRAINT roznorodne_druzyny`: Zapewnia, że id_gospodarza różni się od id_goscia.
-
-**4. Tabela: `statystyki_meczu`**
-*   `id_statystyki` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator statystyki meczu.
-*   `id_meczu` (INTEGER): Klucz obcy, identyfikator meczu, którego dotyczą statystyki.
-*   `id_zawodnika` (INTEGER): Klucz obcy, identyfikator zawodnika, którego dotyczą statystyki.
-*   `minuty` (SMALLINT): Liczba minut rozegranych przez zawodnika w meczu (wartość >= 0).
-*   `punkty` (SMALLINT): Liczba punktów zdobytych przez zawodnika w meczu (wartość >= 0).
-*   `asysty` (SMALLINT): Liczba asyst wykonanych przez zawodnika w meczu (wartość >= 0).
-*   `zbiorki` (SMALLINT): Liczba zbiórek (reboundów) zaliczonych przez zawodnika w meczu (wartość >= 0).
-*   `UNIQUE (id_meczu, id_zawodnika)`: Zapewnia unikalność statystyk dla danego zawodnika w danym meczu.
-
-**5. Tabela: `kontuzja`**
-*   `id_kontuzji` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator kontuzji.
-*   `id_zawodnika` (INTEGER): Klucz obcy, identyfikator zawodnika, który doznał kontuzji.
-*   `typ_kontuzji` (VARCHAR(100)): Opis typu kontuzji (np. 'skręcenie kostki', 'zerwanie więzadła').
-*   `data_rozpoczecia` (DATE): Data rozpoczęcia kontuzji.
-*   `data_zakonczenia` (DATE): Data zakończenia kontuzji.
-*   `status` (VARCHAR(20)): Status kontuzji ('aktywna', 'wyleczona', 'nieznany').
-
-**6. Tabela: `kontrakt`**
-*   `id_kontraktu` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator kontraktu.
-*   `id_zawodnika` (INTEGER): Klucz obcy, identyfikator zawodnika związanego kontraktem.
-*   `id_zespolu` (INTEGER): Klucz obcy, identyfikator zespołu, z którym zawarto kontrakt.
-*   `data_poczatek` (DATE): Data rozpoczęcia kontraktu.
-*   `data_koniec` (DATE): Data zakończenia kontraktu.
-*   `wynagrodzenie_roczne` (NUMERIC(12,2)): Roczne wynagrodzenie zawodnika w ramach kontraktu (wartość >= 0).
-
-**7. Tabela: `arena`**
-*   `id_arena` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator areny.
-*   `nazwa` (VARCHAR(100)): Nazwa areny.
-*   `miasto` (VARCHAR(100)): Miasto, w którym znajduje się arena.
-*   `pojemnosc` (INTEGER): Całkowita pojemność areny (liczba miejsc, wartość > 0).
-*   `rok_otwarcia` (SMALLINT): Rok otwarcia areny (wartość > 1850 i <= bieżący rok).
-
-**8. Tabela: `sezon`**
-*   `id_sezonu` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator sezonu.
-*   `rok_rozpoczecia` (SMALLINT): Rok rozpoczęcia sezonu (wartość > 1900 i <= bieżący rok).
-*   `rok_zakonczenia` (SMALLINT): Rok zakończenia sezonu (wartość >= rok_rozpoczecia i <= bieżący rok).
-
-**9. Tabela: `tabela_ligowa`**
-*   `id_tabeli` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator wpisu w tabeli ligowej.
-*   `id_sezonu` (INTEGER): Klucz obcy, identyfikator sezonu, którego dotyczy wpis.
-*   `id_zespolu` (INTEGER): Klucz obcy, identyfikator zespołu, którego dotyczy wpis.
-*   `liczba_zwyciestw` (SMALLINT): Liczba zwycięstw zespołu w danym sezonie (wartość >= 0).
-*   `liczba_porazek` (SMALLINT): Liczba porażek zespołu w danym sezonie (wartość >= 0).
-*   `miejsce_w_tabeli` (SMALLINT): Miejsce zajęte przez zespół w tabeli ligowej w danym sezonie (wartość > 0).
-*   `UNIQUE(id_sezonu, id_zespolu)`: Zapewnia unikalność pozycji zespołu w tabeli dla danego sezonu.
-
-**10. Tabela: `trener`**
-*   `id_trenera` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator trenera.
-*   `imie` (VARCHAR(50)): Imię trenera.
-*   `nazwisko` (VARCHAR(50)): Nazwisko trenera.
-*   `rola` (VARCHAR(50)): Rola trenera w zespole ('glowny', 'asystent', 'przygotowanie fizyczne').
-*   `id_zespolu` (INTEGER): Klucz obcy, identyfikator zespołu, w którym trener pracuje (może być NULL).
-
-**11. Tabela: `nagroda`**
-*   `id_nagrody` (SERIAL / INTEGER): Klucz główny tabeli, unikalny identyfikator nagrody.
-*   `id_zawodnika` (INTEGER): Klucz obcy, identyfikator zawodnika, który otrzymał nagrodę.
-*   `nazwa_nagrody` (VARCHAR(100)): Nazwa otrzymanej nagrody.
-*   `rok` (SMALLINT): Rok przyznania nagrody (wartość > 1900 i <= bieżący rok).
-
-11. Zaprojektowanie operacji na danych (kwerendy)
-
-W tej części dokumentacji przedstawiamy przykładowe operacje na danych, które są kluczowe dla funkcjonowania aplikacji i spełnienia wymagań projektu. Zaprojektowane kwerendy ułatwią dostęp do informacji oraz ich manipulację.
-
-**11.1. Widoki**
-
-Widoki służą do uproszczenia złożonych zapytań i przedstawienia danych w łatwiejszej do zrozumienia formie. Poniżej przedstawiono przykładowe widoki używane w systemie:
-
-**Widok: `widok_zawodnicy_z_zespolem`**
-**Cel:** Umożliwia łatwe przeglądanie podstawowych informacji o zawodnikach wraz z nazwą zespołu, do którego aktualnie należą.
-**SQL:**
-```sql
-CREATE OR REPLACE VIEW widok_zawodnicy_z_zespolem AS
-SELECT
-  z.id_zawodnika,
-  z.imie,
-  z.nazwisko,
-  z.pozycja,
-  zes.nazwa AS nazwa_zespolu
-FROM zawodnik z
-LEFT JOIN zespol zes ON z.id_zespolu = zes.id_zespolu;
-```
-**Opis:** Widok łączy dane z tabel `zawodnik` i `zespol`, aby wyświetlić identyfikator, imię, nazwisko i pozycję zawodnika, a także nazwę jego zespołu. Użycie `LEFT JOIN` sprawia, że widoczne są również dane zawodników, którzy nie są aktualnie przypisani do żadnego zespołu.
-
-**Widok: `widok_srednie_statystyki_zawodnika`**
-**Cel:** Prezentuje średnie statystyki (punkty, asysty, zbiórki) dla każdego zawodnika.
-**SQL:**
-```sql
-CREATE OR REPLACE VIEW widok_srednie_statystyki_zawodnika AS
-SELECT
-  z.id_zawodnika,
-  z.imie || ' ' || z.nazwisko AS zawodnik_nazwa,
-  ROUND(AVG(s.punkty)::numeric,2) AS srednie_punkty,
-  ROUND(AVG(s.asysty)::numeric,2) AS srednie_asysty,
-  ROUND(AVG(s.zbiorki)::numeric,2) AS srednie_zbiorki
-FROM zawodnik z
-JOIN statystyki_meczu s ON z.id_zawodnika = s.id_zawodnika
-GROUP BY z.id_zawodnika, z.imie, z.nazwisko;
-```
-**Opis:** Widok oblicza średnie punkty, asysty i zbiórki dla każdego zawodnika, łącząc dane z tabel `zawodnik` i `statystyki_meczu`. Wyniki są zaokrąglane do dwóch miejsc po przecinku.
-
-**Widok: `widok_wyniki_meczy`**
-**Cel:** Upraszcza przeglądanie wyników meczów, wyświetlając nazwy zespołów zamiast ich identyfikatorów.
-**SQL:**
-```sql
-CREATE OR REPLACE VIEW widok_wyniki_meczy AS
-SELECT m.id_meczu, m.data_meczu,
-  g.nazwa AS gospodarz, m.wynik_gospodarza,
-  z.nazwa AS gosc, m.wynik_goscia
-FROM mecz m
-JOIN zespol g ON m.id_gospodarza = g.id_zespolu
-JOIN zespol z ON m.id_goscia = z.id_zespolu;
-```
-**Opis:** Widok łączy dane z tabel `mecz` i `zespol`, aby pokazać datę meczu, nazwy zespołów gospodarzy i gości oraz ich wyniki.
-
-**11.2. Przykładowe operacje DML (INSERT, UPDATE, DELETE)**
-
-**Operacja: Dodanie nowego zawodnika (`INSERT`)**
-*   **Cel:** Umożliwia dodanie nowego zawodnika do bazy danych.
-*   **SQL:**
-    ```sql
-    INSERT INTO zawodnik (imie, nazwisko, pozycja, data_urodzenia, id_zespolu)
-    VALUES ('Michael', 'Jordan', 'Rzucający obrońca', '1963-02-17', 1); -- Zakładając, że ID 1 to Chicago Bulls
-    ```
-*   **Opis:** Zapytanie wstawia nowy wiersz do tabeli `zawodnik` z podanymi danymi. `id_zawodnika` zostanie wygenerowane automatycznie dzięki typowi `SERIAL`.
-
-**Operacja: Zmiana zespołu zawodnika (`UPDATE`)**
-*   **Cel:** Umożliwia przypisanie zawodnika do innego zespołu.
-*   **SQL:**
-    ```sql
-    UPDATE zawodnik
-    SET id_zespolu = 2 -- Zakładając, że ID 2 to Los Angeles Lakers
-    WHERE id_zawodnika = 10; -- Zakładając, że aktualizujemy zawodnika o ID 10
-    ```
-*   **Opis:** Zapytanie aktualizuje kolumnę `id_zespolu` dla zawodnika o określonym `id_zawodnika`, co w praktyce oznacza jego transfer do innej drużyny.
-
-**Operacja: Usunięcie zawodnika (`DELETE`)**
-*   **Cel:** Umożliwia usunięcie zawodnika z bazy danych.
-*   **SQL:**
-    ```sql
-    DELETE FROM zawodnik
-    WHERE id_zawodnika = 15; -- Zakładając, że usuwamy zawodnika o ID 15
-    ```
-*   **Opis:** Zapytanie usuwa wiersz odpowiadający zawodnikowi o podanym `id_zawodnika`. Dzięki kaskadowemu usuwaniu (`ON DELETE CASCADE`) w innych tabelach (np. `statystyki_meczu`, `kontrakt`), wszystkie powiązane z nim wpisy również zostaną automatycznie usunięte.
-
-**11.3. Przykładowe zapytania agregujące i raportowe**
-
-**Zapytanie: Bilans zwycięstw i porażek zespołu w danym sezonie**
-*   **Cel:** Prezentuje bilans zwycięstw i porażek dla każdego zespołu w wybranym sezonie.
-*   **SQL:**
-    ```sql
-    SELECT
-        z.nazwa AS nazwa_zespolu,
-        tl.liczba_zwyciestw,
-        tl.liczba_porazek,
-        tl.miejsce_w_tabeli
-    FROM tabela_ligowa tl
-    JOIN zespol z ON tl.id_zespolu = z.id_zespolu
-    WHERE tl.id_sezonu = 1 -- Przykładowy ID sezonu
-    ORDER BY tl.miejsce_w_tabeli ASC;
-    ```
-*   **Opis:** Zapytanie łączy tabelę `tabela_ligowa` z tabelą `zespol`, aby wyświetlić nazwę zespołu oraz jego bilans zwycięstw, porażek i miejsce w tabeli dla określonego sezonu.
-
-**Zapytanie: Zawodnik z największą liczbą punktów w pojedynczym meczu**
-*   **Cel:** Identyfikuje zawodnika, który zdobył najwięcej punktów w jednym meczu, wraz z informacjami o tym meczu.
-*   **SQL:**
-    ```sql
-    SELECT
-        s.punkty,
-        z.imie,
-        z.nazwisko,
-        m.data_meczu,
-        zes.nazwa AS zespol_zawodnika
-    FROM statystyki_meczu s
-    JOIN zawodnik z ON s.id_zawodnika = z.id_zawodnika
-    JOIN mecz m ON s.id_meczu = m.id_meczu
-    JOIN zespol zes ON z.id_zespolu = zes.id_zespolu
-    ORDER BY s.punkty DESC
-    LIMIT 1;
-    ```
-*   **Opis:** Zapytanie łączy dane ze `statystyki_meczu`, `zawodnik`, `mecz` i `zespol` w celu znalezienia maksymalnej liczby punktów zdobytych w jednym meczu przez zawodnika i wyświetla szczegóły tego osiągnięcia.
-
+    b. **Funkcje wbudowane i wyzwalacze (Functions and Triggers):**
+       - **Funkcja `aktualizuj_tabele_ligowa_po_meczu()`**: Procedura odpowiedzialna za automatyczną aktualizację tabeli `tabela_ligowa` po operacjach na tabeli `mecz`. Obsługuje dodawanie nowych meczów, aktualizację wyników oraz usuwanie meczów, prawidłowo modyfikując liczby zwycięstw i porażek dla zaangażowanych zespołów w danym sezonie.
+       - **Wyzwalacze (`trg_aktualizuj_tabele_ligowa_insert`, `trg_aktualizuj_tabele_ligowa_update`, `trg_aktualizuj_tabele_ligowa_delete`)**: Uruchamiają funkcję `aktualizuj_tabele_ligowa_po_meczu()` odpowiednio po dodaniu, zmianie (wyników, sezonu, zespołów) lub usunięciu rekordu w tabeli `mecz`, zapewniając spójność danych między `mecz` a `tabela_ligowa`.
 
 IV. Projekt funkcjonalny
 
-12. Interfejsy do prezentacji, edycji i obsługi danych
+12. Interfejsy do prezentacji, edycji i obsługi danych:
+    Aplikacja webowa (PHP) zapewnia interfejsy formularzy (CRUD) dla większości kluczowych encji, w tym:
+    - **Zawodnicy**: Przeglądanie listy, szczegóły, dodawanie, edycja, usuwanie.
+    - **Zespoły**: Przeglądanie listy, szczegóły, dodawanie, edycja, usuwanie.
+    - **Mecze**: Przeglądanie listy, szczegóły, dodawanie, edycja, usuwanie.
+    - **Areny**: Przeglądanie listy, dodawanie, edycja, usuwanie.
+    - **Sezony**: Przeglądanie listy, dodawanie, edycja, usuwanie.
+    - **Trenerzy**: Przeglądanie listy, dodawanie, edycja, usuwanie.
+    - **Kontrakty**: Przeglądanie listy, dodawanie, edycja, usuwanie.
+    - **Kontuzje**: Przeglądanie listy, dodawanie, edycja, usuwanie.
+    - **Nagrody**: Przeglądanie listy, dodawanie, edycja, usuwanie.
+    - **Tabela Ligowa**: Przeglądanie listy, dodawanie, edycja, usuwanie.
+    - **Użytkownicy (dla administratorów)**: Przeglądanie listy, dodawanie, edycja, usuwanie.
 
-W tym punkcie opiszę, jak wyobrażam sobie wygląd i działanie głównych okienek (formularzy) w mojej aplikacji. Chodzi o to, żeby korzystanie z programu było proste i intuicyjne.
+13. Wizualizacja danych:
+    Aplikacja generuje następujące raporty:
+    - **Średnie statystyki zawodników**: Raport przedstawiający średnie statystyki dla każdego gracza.
+    - **Tabela ligowa dla sezonu**: Raport przedstawiający pozycję zespołów w danym sezonie.
+    - **Zawodnik z największą liczbą punktów w jednym meczu**: Raport identyfikujący zawodnika z najlepszym wynikiem punktowym w pojedynczym meczu.
+    - **Liderzy statystyk (zawodnicy z wysoką średnią punktów)**: Raport prezentujący zawodników, którzy spełniają określone kryteria statystyczne (np. minimum 5 meczów i średnia powyżej 10 punktów).
 
-12.1. Formularz do zarządzania zawodnikami
+14. Zdefiniowanie panelu sterowania aplikacji:
+    Główny panel sterowania to nawigacja aplikacji webowej. Zawiera ona linki do poszczególnych sekcji zarządzania danymi (np. Zawodnicy, Zespoły, Mecze, Raporty). Dostęp do niektórych sekcji (np. Zarządzanie Użytkownikami) jest ograniczony wyłącznie dla administratorów po zalogowaniu. System logowania/wylogowywania jest zintegrowany z panelem.
 
-To będzie główne centrum zarządzania zawodnikami. Użytkownik będzie mógł tutaj zobaczyć listę wszystkich graczy, dodać nowego, poprawić dane istniejącego albo go usunąć.
+V. Dokumentacja
 
-Główne okno - Lista zawodników
+16. Wprowadzanie danych:
+    Dane do systemu mogą być wprowadzane ręcznie za pośrednictwem dedykowanych formularzy w aplikacji webowej.
 
-Po wejściu w opcję "Zawodnicy", użytkownik zobaczy listę wszystkich graczy.
+17. Dokumentacja użytkownika:
+    (Do uzupełnienia po stworzeniu finalnej wersji aplikacji)
 
-*   **Co będzie w tym oknie?**
-    *   **Tabelka z zawodnikami**, a w niej kolumny: `Imię`, `Nazwisko`, `Zespół` i `Pozycja`.
-    *   **Na górze okna** umieszczę kilka przydatnych rzeczy:
-        *   Duży przycisk **"Dodaj nowego zawodnika"**.
-        *   **Okienko do szukania** po nazwisku, żeby szybko kogoś znaleźć.
-        *   **Rozwijaną listę z zespołami**, żeby można było wyświetlić tylko graczy z jednej drużyny.
-    *   **Przy każdym zawodniku** w tabeli będą dwa małe przyciski: **"Edytuj"** i **"Usuń"**.
+18. Opracowanie dokumentacji technicznej:
+    Niniejsza dokumentacja techniczna ma za zadanie opisać strukturę i funkcjonalność systemu, umożliwiając dalszą rozbudowę. Kod źródłowy aplikacji PHP jest komentowany.
 
-Okno dodawania i edycji zawodnika
-
-To okienko będzie wyskakiwać po kliknięciu "Dodaj nowego zawodnika" albo "Edytuj".
-
-*   **Co będzie w tym formularzu?**
-    *   Zwykłe pola do wpisania **imienia** i **nazwiska**.
-    *   Rozwijana lista z pozycjami, np. "Rozgrywający", "Środkowy". Dzięki temu dane będą spójne.
-    *   Specjalne pole **kalendarza** do wybrania daty urodzenia.
-    *   Kolejna rozwijana lista, tym razem **z nazwami zespołów** pobranymi z bazy. Będzie też opcja "Brak zespołu".
-*   **Na dole formularza:**
-    *   Przycisk **"Zapisz"**, który zapisze zmiany w bazie.
-    *   Przycisk **"Anuluj"**, który zamknie okienko bez zapisywania.
-
-Jak to będzie działać w praktyce?
-
-1.  **Gdy chcemy dodać zawodnika:** Klikamy "Dodaj nowego zawodnika". Wyskoczy pusty formularz. Wypełniamy dane, klikamy "Zapisz" – i gotowe, nowy zawodnik pojawia się na liście. W tle poleci komenda `INSERT`.
-2.  **Gdy chcemy coś poprawić:** Klikamy "Edytuj" przy kimś na liście. Wyskoczy ten sam formularz, ale już wypełniony jego danymi. Zmieniamy co trzeba, klikamy "Zapisz", a dane w bazie się zaktualizują przez komendę `UPDATE`.
-3.  **Gdy chcemy kogoś usunąć:** Klikamy "Usuń". Program dla bezpieczeństwa zapyta "Czy na pewno?". Jeśli klikniemy "Tak", poleci komenda `DELETE` i zawodnik zniknie z listy.
+19. Wykaz literatury:
+    (Do uzupełnienia)
