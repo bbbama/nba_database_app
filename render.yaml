@@ -1,19 +1,43 @@
 # render.yaml
+# Blueprint for deploying a PHP application with PostgreSQL on Render using Docker.
+
 services:
   - type: web
     name: nba-app
+    # Using 'docker' runtime means Render will build and run your Dockerfile.
     runtime: docker
+    # The root directory for the web service relative to the repository root.
+    # This is where Render will look for your Dockerfile and application code.
     rootDir: aplikacja_www
+    # buildCommand is typically left empty for 'docker' runtime as the Dockerfile handles the build process.
+    buildCommand: ""
+    # startCommand is also handled by the CMD in your Dockerfile.
+    # It's good practice to align this with your Dockerfile's CMD if Render provides an override.
+    startCommand: "nginx -g 'daemon off;' && php-fpm"
     envVars:
+      # DATABASE_URL is automatically populated by Render for linked databases.
+      # Your config.php should parse this to extract credentials.
       - key: DATABASE_URL
         fromDatabase:
           name: nba-db
           property: connectionString
+      # APP_ENV is a common variable for setting the application environment (e.g., production, development).
       - key: APP_ENV
-        value: production
+        value: "production"
+      # You can add other environment variables here if your application needs them.
+      # For instance, if you have any secret keys or API keys.
+      - key: APP_SECRET_KEY # Example for a hypothetical secret key
+        generateValue: true # Render can generate a secure random value for you
 
+# Databases are defined under a separate top-level 'databases' key in Render Blueprints.
 databases:
   - name: nba-db
-    databaseName: nba_database # Your desired database name
-    user: nba_user # Your desired database user
-    plan: free # Choose your desired plan: free, starter, or professional
+    # The database name to be created within the PostgreSQL instance.
+    databaseName: nba_database
+    # The username for the database.
+    user: nba_user
+    # The plan for your database. 'free' is available for testing purposes.
+    # Be aware of its limitations and consider upgrading for production.
+    plan: free
+    # You can specify a region if needed, e.g., 'oregon'.
+    # region: oregon
