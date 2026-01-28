@@ -37,7 +37,7 @@ services:
       - key: APP_ENV # Optional: set application environment
         value: "production"
 
-  - type: postgres
+  - type: database
     name: nba-db
     databaseName: nba_database # Your desired database name
     user: nba_user # Your desired database user
