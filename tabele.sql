@@ -1,5 +1,3 @@
--- Utworzenie schematu (opcjonalnie)
--- CREATE SCHEMA nba;
 
 -- Tabela: zespol
 CREATE TABLE zespol (
@@ -47,10 +45,6 @@ CREATE TABLE statystyki_meczu (
 CREATE INDEX idx_zawodnik_zespol ON zawodnik(id_zespolu);
 CREATE INDEX idx_statystyki_meczu_mecz ON statystyki_meczu(id_meczu);
 CREATE INDEX idx_statystyki_meczu_zawodnik ON statystyki_meczu(id_zawodnika);
-
---------------------------------------------------------------------------------
--- DODATKOWE ENCJE
---------------------------------------------------------------------------------
 
 -- 1. Kontuzje zawodników
 CREATE TABLE kontuzja (

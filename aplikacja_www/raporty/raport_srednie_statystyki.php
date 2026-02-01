@@ -5,7 +5,6 @@ require_once $basePath . 'db.php';
 
 $pdo = getDbConnection();
 
-// Widok jest teraz bardziej rozbudowany i zawiera wszystkie potrzebne kolumny.
 // Dodajemy warunek, aby pokazywać tylko graczy, którzy mają zarejestrowane statystyki.
 $sql = "SELECT * FROM widok_srednie_statystyki_zawodnika WHERE liczba_meczow > 0 ORDER BY srednie_punkty DESC";
 $stmt = $pdo->query($sql);

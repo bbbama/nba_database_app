@@ -1,6 +1,4 @@
--- funkcja: aktualizuj_tabele_ligowa_po_meczu()
--- Cel: Aktualizuje tabelę ligową na podstawie wyniku meczu.
--- Obsługuje dodawanie nowych meczów oraz zmianę wyników istniejących.
+
 CREATE OR REPLACE FUNCTION aktualizuj_tabele_ligowa_po_meczu()
 RETURNS TRIGGER AS $$
 DECLARE

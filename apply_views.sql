@@ -1,10 +1,4 @@
--- Plik: apply_views.sql
--- Cel: Aktualizacja i stworzenie widoków bazodanowych oraz modyfikacja tabeli 'tabela_ligowa'.
--- Wersja 2: Dodano 'DROP VIEW IF EXISTS', aby uniknąć błędów przy zmianie kolejności/nazw kolumn.
 
---------------------------------------------------------------------------------
--- 1. Nowy, dynamiczny widok tabeli ligowej
---------------------------------------------------------------------------------
 DROP VIEW IF EXISTS widok_tabeli_ligowej;
 CREATE VIEW widok_tabeli_ligowej AS
 SELECT
@@ -36,9 +30,6 @@ JOIN zespol z ON tl.id_zespolu = z.id_zespolu;
 ALTER TABLE tabela_ligowa DROP COLUMN IF EXISTS miejsce_w_tabeli;
 
 
---------------------------------------------------------------------------------
--- 2. Ulepszony widok średnich statystyk zawodnika
---------------------------------------------------------------------------------
 DROP VIEW IF EXISTS widok_srednie_statystyki_zawodnika;
 CREATE OR REPLACE VIEW widok_srednie_statystyki_zawodnika AS
 SELECT
